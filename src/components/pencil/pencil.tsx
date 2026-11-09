@@ -1,7 +1,23 @@
+"use client";
+
 // Grease-pencil marks (DESIGN.md › Named Rules: One Job Per Pencil, Annotation).
 // Red loop = the current pick; yellow underline = locked; red crop marks = the export frame.
 // Marks are decoration over standard controls: always aria-hidden, never the only state signal.
+// Marks that come and go stay mounted and switch with `on`, so a change can lift the old mark and
+// draw the new one (DESIGN.md › Motion); nothing animates on first render.
+import { useEffect, useRef } from "react";
+import { drawOn, erase, lift } from "@/lib/motion";
 import { cropCornerPaths, loopGeometry, underlinePaths } from "./marks";
+
+/** Runs `change(on)` when `on` flips after mount. */
+const useSwitch = (on: boolean, change: (on: boolean) => void) => {
+  const was = useRef(on);
+  useEffect(() => {
+    if (was.current === on) return;
+    was.current = on;
+    change(on);
+  });
+};
 
 /** The wax texture every mark shares; render once per page. */
 export const WaxFilter = () => (
@@ -21,7 +37,7 @@ export const WaxFilter = () => (
   </svg>
 );
 
-/** A red loop around its (relative) parent box of w×h. */
+/** A red loop around its (relative) parent box of w×h: drawn on when `on`, lifted when not. */
 export const PencilLoop = ({
   w,
   h,
@@ -29,7 +45,9 @@ export const PencilLoop = ({
   stroke = 2.6,
   seed = 1,
   fluid = false,
+  on = true,
 }: {
+  on?: boolean;
   w: number;
   h: number;
   pad?: number;
@@ -38,6 +56,8 @@ export const PencilLoop = ({
   /** Stretch to a parent whose size is fluid (w×h is then the nominal size). */
   fluid?: boolean;
 }) => {
+  const ref = useRef<SVGSVGElement>(null);
+  useSwitch(on, (now) => (now ? drawOn : lift)(ref.current));
   const g = loopGeometry(w, h, { pad, stroke, seed });
   const box = fluid
     ? {
@@ -49,8 +69,9 @@ export const PencilLoop = ({
     : { left: g.offset, top: g.offset, width: g.width, height: g.height };
   return (
     <svg
+      ref={ref}
       className="pencil-mark pointer-events-none absolute overflow-visible"
-      style={box}
+      style={{ ...box, opacity: on ? 1 : 0 }}
       viewBox={`0 0 ${g.width} ${g.height}`}
       preserveAspectRatio="none"
       aria-hidden="true"
@@ -69,38 +90,45 @@ export const PencilLoop = ({
   );
 };
 
-/** A yellow underline under its (relative) parent, stretched to the parent's width. */
+/** A yellow underline under its (relative) parent: drawn on when `on`, removed when not. */
 export const PencilUnderline = ({
   seed = 1,
   stroke = 4,
   offset = 3,
+  on = true,
 }: {
   seed?: number;
   stroke?: number;
   offset?: number;
-}) => (
-  <svg
-    className="pencil-mark pointer-events-none absolute left-0 h-4 w-full overflow-visible"
-    style={{ bottom: -offset - 8 }}
-    viewBox="-4 0 108 16"
-    preserveAspectRatio="none"
-    aria-hidden="true"
-  >
-    {underlinePaths(seed).map((d, k) => (
-      <path
-        key={d}
-        pathLength={1}
-        d={d}
-        fill="none"
-        stroke="var(--pencil-yellow)"
-        strokeWidth={stroke - k}
-        strokeLinecap="round"
-        vectorEffect="non-scaling-stroke"
-        filter="url(#wax)"
-      />
-    ))}
-  </svg>
-);
+  on?: boolean;
+}) => {
+  const ref = useRef<SVGSVGElement>(null);
+  useSwitch(on, (now) => (now ? drawOn : erase)(ref.current));
+  return (
+    <svg
+      ref={ref}
+      className="pencil-mark pointer-events-none absolute left-0 h-4 w-full overflow-visible"
+      style={{ bottom: -offset - 8, opacity: on ? 1 : 0 }}
+      viewBox="-4 0 108 16"
+      preserveAspectRatio="none"
+      aria-hidden="true"
+    >
+      {underlinePaths(seed).map((d, k) => (
+        <path
+          key={d}
+          pathLength={1}
+          d={d}
+          fill="none"
+          stroke="var(--pencil-yellow)"
+          strokeWidth={stroke - k}
+          strokeLinecap="round"
+          vectorEffect="non-scaling-stroke"
+          filter="url(#wax)"
+        />
+      ))}
+    </svg>
+  );
+};
 
 /** Red crop corners just outside the corners of its (relative) parent print, at any size. */
 export const CropMarks = ({
@@ -125,7 +153,7 @@ export const CropMarks = ({
   return cropCornerPaths({ len, seed }).map((d, i) => (
     <svg
       key={d}
-      className="pencil-mark pointer-events-none absolute overflow-visible"
+      className="pencil-mark crop-mark pointer-events-none absolute overflow-visible"
       style={corners[i]}
       width={half * 2}
       height={half * 2}

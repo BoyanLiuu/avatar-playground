@@ -444,7 +444,7 @@ Bordered, quiet and standard; the ink button is the only filled one.
 
 ### Film strip (signature)
 
-A film-black band, 6px radius, with sprocket rows top and bottom. Frames are avatar shots with edge-print numbers beneath, newest at the right; the current frame is circled in red and its number turns paper. In Grid view the strip becomes the contact sheet itself: three strips of four large frames, the pick circled.
+A film-black band, 6px radius, with sprocket rows top and bottom. Frames are avatar shots with edge-print numbers beneath, newest at the right; the current frame is circled in red and its number turns paper. In Grid view the strip becomes the contact sheet itself: three strips of four large frames, numbered on from the current frame. Clicking a frame circles it; Keep frame stays disabled until one is circled, then adopts it under its number and returns to Single view.
 
 ### Hero print and crop marks
 

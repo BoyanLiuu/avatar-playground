@@ -1,7 +1,7 @@
 import { type Page, expect, test } from "@playwright/test";
 
-// M1.2–M1.4: the static playground against the plan's checks. Screenshots go to test-results/ for
-// side-by-side review with docs/avatar/playground-*.png (light) and docs/avatar/dark/ (dark).
+// M1.2–M1.4: the playground's layout against the plan's checks. Screenshots go to test-results/
+// for side-by-side review with docs/avatar/playground-*.png (light) and docs/avatar/dark/ (dark).
 
 const STYLES = [
   ["Flat Cartoon", "flat", 5],
@@ -22,8 +22,13 @@ const open = async (
   return page;
 };
 
+/** Every image loaded and every entrance animation finished. */
 const settle = (page: Page) =>
-  page.waitForFunction(() => [...document.images].every((img) => img.complete));
+  page.waitForFunction(
+    () =>
+      [...document.images].every((img) => img.complete) &&
+      document.getAnimations().every((a) => a.playState !== "running"),
+  );
 
 test("style list: six rows, the current one marked, part lists from data", async ({
   browser,

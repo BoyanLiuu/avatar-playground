@@ -1,38 +1,57 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { WaxFilter } from "@/components/pencil/pencil";
 import { CustomizeSheet } from "@/components/shell/customize-sheet";
 import { TopBand } from "@/components/shell/top-band";
 import { TooltipProvider } from "@/components/ui/tooltip";
-import { type StyleId, getStyle } from "@/content/styles";
-import { fixtures } from "@/lib/fixtures";
+import { STYLES } from "@/content/styles";
+import { useCurrent, usePlayground } from "@/store/playground";
 import {
   CustomizeColumn,
   CustomizePhone,
   CustomizeSections,
   subtitleOf,
 } from "./customize-panel";
-import { Stage, type View } from "./stage";
-import { type Scope, StyleChips, StyleRail } from "./style-list";
+import { Stage } from "./stage";
+import { StyleChips, StyleRail } from "./style-list";
 
-/**
- * The playground screen (M1: static UX). Local UI state only: the current style, Single/Grid,
- * the randomize scope and the phone's part tab. Everything else shows the fixture state.
- */
+/** Space must still press a focused control, and no shortcut fires while typing or in a menu. */
+const CONTROL =
+  "button, a, input, textarea, select, [contenteditable], [role=radio], [role=tab], [role=menuitem], [role=option]";
+const TYPING = "input, textarea, select, [contenteditable], [role=menu]";
+
+/** Space randomizes (or rolls a new sheet in Grid); 1–6 switch style. Never on key repeat. */
+const useShortcuts = () =>
+  useEffect(() => {
+    const onKey = (e: KeyboardEvent) => {
+      if (e.repeat || e.metaKey || e.ctrlKey || e.altKey) return;
+      const target = e.target instanceof Element ? e.target : null;
+      if (target?.closest(TYPING)) return;
+      const s = usePlayground.getState();
+      if (e.code === "Space") {
+        if (target?.closest(CONTROL)) return;
+        e.preventDefault();
+        if (s.view === "grid") s.rollSheet();
+        else s.roll();
+        return;
+      }
+      const n = /^Digit([1-6])$/.exec(e.code)?.[1];
+      if (n && !e.shiftKey) s.selectStyle(STYLES[Number(n) - 1].id);
+    };
+    document.addEventListener("keydown", onKey);
+    return () => document.removeEventListener("keydown", onKey);
+  }, []);
+
+/** The playground screen: rail, stage and customize panel over one store. */
 export const Playground = () => {
-  const [styleId, setStyleId] = useState<StyleId>("flat");
-  const [view, setView] = useState<View>("single");
-  const [scope, setScope] = useState<Scope>("style");
+  const { style } = useCurrent();
   const [tab, setTab] = useState<string>("");
-  const style = getStyle(styleId);
-  const fx = fixtures[styleId];
-  const phoneTab =
-    tab || style.sections.find((s) => s.kind === "tiles")?.key || "";
-  const selectStyle = (id: StyleId) => {
-    setStyleId(id);
-    setTab("");
-  };
+  useShortcuts();
+  // The phone's part tab falls back to the style's first tile part.
+  const phoneTab = style.sections.some((s) => s.key === tab)
+    ? tab
+    : (style.sections.find((s) => s.kind === "tiles")?.key ?? "");
 
   return (
     <TooltipProvider delay={400}>
@@ -40,32 +59,21 @@ export const Playground = () => {
       <div className="flex min-h-dvh flex-col xl:h-dvh xl:overflow-hidden">
         <TopBand />
         <main className="flex min-h-0 flex-1 flex-col sm:flex-row">
-          <StyleRail
-            current={styleId}
-            onSelect={selectStyle}
-            scope={scope}
-            onScope={setScope}
-          />
-          <StyleChips current={styleId} onSelect={selectStyle} />
+          <StyleRail />
+          <StyleChips />
           <Stage
-            style={style}
-            fx={fx}
-            view={view}
-            onView={setView}
-            scope={scope}
-            onScope={setScope}
             customize={
               <CustomizeSheet
                 side="right"
                 subtitle={subtitleOf(style)}
                 className="max-sm:hidden xl:hidden"
               >
-                <CustomizeSections style={style} fx={fx} />
+                <CustomizeSections />
               </CustomizeSheet>
             }
           />
-          <CustomizeColumn style={style} fx={fx} />
-          <CustomizePhone style={style} fx={fx} tab={phoneTab} onTab={setTab} />
+          <CustomizeColumn />
+          <CustomizePhone tab={phoneTab} onTab={setTab} />
         </main>
       </div>
     </TooltipProvider>

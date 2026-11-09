@@ -1,7 +1,4 @@
-import { existsSync } from "node:fs";
-import { join } from "node:path";
 import { describe, expect, it } from "vitest";
-import fixtures from "@/fixtures/fixtures.json";
 import { STYLES, partsOf } from "./styles";
 
 const HEX = /^#[0-9a-f]{6}$/i;
@@ -39,35 +36,6 @@ describe("style content", () => {
         }
       }
       expect(partsOf(style).length).toBeGreaterThanOrEqual(5);
-    },
-  );
-});
-
-describe("M1 fixtures", () => {
-  const publicFile = (url: string) => join(process.cwd(), "public", url);
-
-  it.each(STYLES)(
-    "$name: every fixture file exists and each part has a selection",
-    (style) => {
-      const fx = fixtures[style.id];
-      [fx.hero, ...fx.history, ...fx.sheet].forEach((url) =>
-        expect(existsSync(publicFile(url)), url).toBe(true),
-      );
-      expect(fx.history).toHaveLength(12);
-      expect(fx.sheet).toHaveLength(12);
-      for (const s of style.sections) {
-        const selected = (fx.selected as Record<string, string>)[s.key];
-        if (s.kind === "tiles") {
-          expect(s.options).toContain(selected);
-          const tiles = (fx.tiles as Record<string, string[]>)[s.key];
-          expect(tiles).toHaveLength(s.options.length);
-          tiles.forEach((url) =>
-            expect(existsSync(publicFile(url)), url).toBe(true),
-          );
-        } else {
-          expect(s.colors).toContain(selected);
-        }
-      }
     },
   );
 });
