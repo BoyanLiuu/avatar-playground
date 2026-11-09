@@ -69,25 +69,40 @@ test.describe("layout", () => {
     });
   }
 
-  test("phone 390x844: band, stage and the customize sheet", async ({
+  test("phone 390x844: chips, stage and the in-page customize sheet", async ({
     browser,
   }) => {
     const page = await browser.newPage({
       viewport: { width: 390, height: 844 },
     });
     await page.goto("/");
-    await expect(page.getByRole("navigation", { name: "Styles" })).toBeHidden();
+    await expect(
+      page.getByRole("navigation", { name: "Styles" }),
+    ).toBeVisible();
     await expect(
       page.getByRole("complementary", { name: "Customize" }),
     ).toBeHidden();
+    await expect(page.getByRole("region", { name: "Customize" })).toBeVisible();
     expect(
       await page.evaluate(() => document.documentElement.scrollWidth),
     ).toBe(390);
-    await page.screenshot({ path: "test-results/shell-390.png" });
+    await page.close();
+  });
+
+  test("tablet 1024x768: the customize panel opens as a sheet", async ({
+    browser,
+  }) => {
+    const page = await browser.newPage({
+      viewport: { width: 1024, height: 768 },
+    });
+    await page.goto("/");
+    await expect(
+      page.getByRole("complementary", { name: "Customize" }),
+    ).toBeHidden();
     await page.getByRole("button", { name: "Customize" }).click();
     await expect(page.getByRole("dialog", { name: "Customize" })).toBeVisible();
     await page.waitForTimeout(400); // let the sheet finish opening
-    await page.screenshot({ path: "test-results/shell-390-sheet.png" });
+    await page.screenshot({ path: "test-results/m1-tablet-sheet.png" });
     await page.close();
   });
 });

@@ -423,6 +423,8 @@ Bordered, quiet and standard; the ink button is the only filled one.
 - **Pressed:** secondary, small and toolbar buttons (and the ink button) translate down 1px while held.
 - **Focus:** 2px ink outline, 2px offset, on every control. On the film band and the film strip the ring uses band text instead, so it shows against film in both themes.
 
+- **Key caps:** print-white fill, a 1px rule-2 border with a 2px bottom edge (the key's depth, neutral grey, never an accent), 4px radius, Label type at 0.04em. Inside the ink button they take the primary key cap colours.
+
 ### Segmented controls
 
 - **Style:** tray track with hairline border and 3px padding; segments are text-on-transparent in graphite.

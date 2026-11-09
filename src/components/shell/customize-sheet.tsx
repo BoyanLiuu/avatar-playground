@@ -48,7 +48,7 @@ export const CustomizeSheet = ({
       className={cn(
         "gap-0 bg-panel",
         side === "right"
-          ? "w-[424px] sm:max-w-[424px]"
+          ? "data-[side=right]:w-[424px] data-[side=right]:sm:max-w-[424px]"
           : "max-h-[80dvh] rounded-t-sheet",
       )}
     >

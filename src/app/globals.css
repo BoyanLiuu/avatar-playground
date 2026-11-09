@@ -198,6 +198,63 @@
 }
 
 @layer components {
+  /* Film strip (DESIGN.md › Film strip): sprocket rows top and bottom. */
+  .film-strip::before,
+  .film-strip::after {
+    content: "";
+    position: absolute;
+    left: 12px;
+    right: 12px;
+    height: 6px;
+    background: var(--sprocket-img) repeat-x left center / 19px 6px;
+  }
+  .film-strip::before {
+    top: 7px;
+  }
+  .film-strip::after {
+    bottom: 7px;
+  }
+  .film-strip.compact::before,
+  .film-strip.compact::after {
+    left: 8px;
+    right: 8px;
+    height: 4px;
+    background-size: 19px 4px;
+  }
+  .film-strip.compact::before {
+    top: 5px;
+  }
+  .film-strip.compact::after {
+    bottom: 5px;
+  }
+
+  /* Stage sizes scale with the viewport so the first screen never overflows (DESIGN.md › Layout):
+     the hero is 416px at 1440×900 and shrinks on shorter or narrower stages; the phone hero is
+     240px. Grid frames are 136px at most, four to a strip. */
+  .stage {
+    --hero: min(clamp(200px, calc(100dvh - 431px), 416px), calc(100cqw - 88px));
+    --sheet-frame: min(
+      clamp(64px, calc((100dvh - 278px) / 3 - 66px), 136px),
+      calc((100cqw - 144px) / 4)
+    );
+  }
+  .hero-avatar {
+    width: var(--hero);
+    height: var(--hero);
+  }
+  /* A narrow stage wraps the toolbar onto its own row: give that row its height back. */
+  @container (max-width: 44rem) {
+    .hero-avatar {
+      width: min(var(--hero), calc(100dvh - 515px));
+      height: min(var(--hero), calc(100dvh - 515px));
+    }
+  }
+  @media (max-width: 639px) {
+    .stage {
+      --hero: 240px;
+    }
+  }
+
   /* Edge print: condensed uppercase labels (DESIGN.md › The Edge Print Rule). */
   .edge-label {
     font-family: var(--font-edge);

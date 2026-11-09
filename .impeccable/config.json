@@ -1,0 +1,17 @@
+{
+  "detector": {
+    "ignoreRules": [],
+    "ignoreFiles": [],
+    "ignoreValues": [
+      {
+        "rule": "border-accent-on-rounded",
+        "value": "*",
+        "files": [
+          "src/components/playground/key-cap.tsx"
+        ],
+        "createdAt": "2026-11-09T09:18:57.199Z",
+        "reason": "Agent decision: key caps use a neutral 2px bottom edge (rule-2 grey, not an accent colour) as the keyboard-key depth cue, as in the approved Contact Sheet mockups (docs/avatar/mockups/worlds/contact-sheet.mjs .kbd)"
+      }
+    ]
+  }
+}
