@@ -5,3 +5,4 @@ test-results
 playwright-report
 # porting reference, kept identical to docs/avatar/prototype
 prototype
+.impeccable

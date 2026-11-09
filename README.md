@@ -21,6 +21,7 @@ pnpm is provided by corepack (`corepack pnpm …`, or run `corepack enable` once
 
 ## Layout
 
-- `src/app`: routes (`layout.tsx` sets the static `dark` class; v1 is dark-only)
+- `src/app`: routes (`layout.tsx` sets a static `dark` class for now; M2 switches to next-themes for light + dark, see `DESIGN.md`)
 - `src/components/ui`: shadcn components. Add with `pnpm dlx shadcn@latest add <name>`, then run `pnpm lint --fix && pnpm format`: shadcn emits `function` components, the ESLint rules (same as `boyanliu.me`) convert them to arrow functions, and Prettier cleans up the result
-- `prototype/`: the JS prototype the engine is ported from (M1, M5); not part of the build
+- `prototype/generate.mjs`: the JS avatar engine prototype, ported in M1 and M5, then deleted; not part of the build
+- Design mockups, PNGs and the motion demo live outside this repo in `../docs/avatar/` (generator: `node ../docs/avatar/mockups/build.mjs`)

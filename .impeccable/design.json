@@ -1,0 +1,1100 @@
+{
+  "schemaVersion": 2,
+  "generatedAt": "2026-11-09T07:44:37.525810Z",
+  "title": "Design System: Avatar Playground",
+  "extensions": {
+    "colorMeta": {
+      "paper": {
+        "role": "neutral",
+        "displayName": "Photo Paper",
+        "canonical": "oklch(96.6% 0.003 128.5)",
+        "tonalRamp": [
+          "oklch(15% 0.001 128.5)",
+          "oklch(26% 0.002 128.5)",
+          "oklch(37% 0.002 128.5)",
+          "oklch(48% 0.003 128.5)",
+          "oklch(59% 0.003 128.5)",
+          "oklch(70% 0.002 128.5)",
+          "oklch(82% 0.002 128.5)",
+          "oklch(95% 0.001 128.5)"
+        ]
+      },
+      "panel-paper": {
+        "role": "neutral",
+        "displayName": "Panel Paper",
+        "canonical": "oklch(97.8% 0.003 128.5)",
+        "tonalRamp": [
+          "oklch(15% 0.001 128.5)",
+          "oklch(26% 0.002 128.5)",
+          "oklch(37% 0.002 128.5)",
+          "oklch(48% 0.003 128.5)",
+          "oklch(59% 0.003 128.5)",
+          "oklch(70% 0.002 128.5)",
+          "oklch(82% 0.002 128.5)",
+          "oklch(95% 0.001 128.5)"
+        ]
+      },
+      "print-white": {
+        "role": "neutral",
+        "displayName": "Print White",
+        "canonical": "oklch(100.0% 0.000 0.0)",
+        "tonalRamp": [
+          "oklch(15% 0.000 0.0)",
+          "oklch(26% 0.000 0.0)",
+          "oklch(37% 0.000 0.0)",
+          "oklch(48% 0.000 0.0)",
+          "oklch(59% 0.000 0.0)",
+          "oklch(70% 0.000 0.0)",
+          "oklch(82% 0.000 0.0)",
+          "oklch(95% 0.000 0.0)"
+        ]
+      },
+      "tray": {
+        "role": "neutral",
+        "displayName": "Developing Tray",
+        "canonical": "oklch(92.9% 0.005 134.9)",
+        "tonalRamp": [
+          "oklch(15% 0.002 134.9)",
+          "oklch(26% 0.003 134.9)",
+          "oklch(37% 0.003 134.9)",
+          "oklch(48% 0.004 134.9)",
+          "oklch(59% 0.004 134.9)",
+          "oklch(70% 0.004 134.9)",
+          "oklch(82% 0.003 134.9)",
+          "oklch(95% 0.002 134.9)"
+        ]
+      },
+      "ink": {
+        "role": "neutral",
+        "displayName": "Ink",
+        "canonical": "oklch(19.5% 0.003 248.0)",
+        "tonalRamp": [
+          "oklch(15% 0.001 248.0)",
+          "oklch(26% 0.002 248.0)",
+          "oklch(37% 0.002 248.0)",
+          "oklch(48% 0.002 248.0)",
+          "oklch(59% 0.002 248.0)",
+          "oklch(70% 0.002 248.0)",
+          "oklch(82% 0.002 248.0)",
+          "oklch(95% 0.001 248.0)"
+        ]
+      },
+      "ink-2": {
+        "role": "neutral",
+        "displayName": "Ink Soft",
+        "canonical": "oklch(29.2% 0.005 248.0)",
+        "tonalRamp": [
+          "oklch(15% 0.002 248.0)",
+          "oklch(26% 0.003 248.0)",
+          "oklch(37% 0.004 248.0)",
+          "oklch(48% 0.004 248.0)",
+          "oklch(59% 0.004 248.0)",
+          "oklch(70% 0.004 248.0)",
+          "oklch(82% 0.003 248.0)",
+          "oklch(95% 0.002 248.0)"
+        ]
+      },
+      "graphite": {
+        "role": "neutral",
+        "displayName": "Graphite",
+        "canonical": "oklch(46.2% 0.007 170.2)",
+        "tonalRamp": [
+          "oklch(15% 0.003 170.2)",
+          "oklch(26% 0.004 170.2)",
+          "oklch(37% 0.005 170.2)",
+          "oklch(48% 0.006 170.2)",
+          "oklch(59% 0.007 170.2)",
+          "oklch(70% 0.006 170.2)",
+          "oklch(82% 0.005 170.2)",
+          "oklch(95% 0.003 170.2)"
+        ]
+      },
+      "rule": {
+        "role": "neutral",
+        "displayName": "Hairline",
+        "canonical": "oklch(89.1% 0.005 145.5)",
+        "tonalRamp": [
+          "oklch(15% 0.003 145.5)",
+          "oklch(26% 0.003 145.5)",
+          "oklch(37% 0.004 145.5)",
+          "oklch(48% 0.005 145.5)",
+          "oklch(59% 0.005 145.5)",
+          "oklch(70% 0.004 145.5)",
+          "oklch(82% 0.003 145.5)",
+          "oklch(95% 0.003 145.5)"
+        ]
+      },
+      "rule-2": {
+        "role": "neutral",
+        "displayName": "Control Rule",
+        "canonical": "oklch(82.9% 0.006 153.8)",
+        "tonalRamp": [
+          "oklch(15% 0.003 153.8)",
+          "oklch(26% 0.004 153.8)",
+          "oklch(37% 0.005 153.8)",
+          "oklch(48% 0.005 153.8)",
+          "oklch(59% 0.006 153.8)",
+          "oklch(70% 0.005 153.8)",
+          "oklch(82% 0.004 153.8)",
+          "oklch(95% 0.003 153.8)"
+        ]
+      },
+      "film": {
+        "role": "neutral",
+        "displayName": "Film Black",
+        "canonical": "oklch(19.5% 0.003 248.0)",
+        "tonalRamp": [
+          "oklch(15% 0.001 248.0)",
+          "oklch(26% 0.002 248.0)",
+          "oklch(37% 0.002 248.0)",
+          "oklch(48% 0.002 248.0)",
+          "oklch(59% 0.002 248.0)",
+          "oklch(70% 0.002 248.0)",
+          "oklch(82% 0.002 248.0)",
+          "oklch(95% 0.001 248.0)"
+        ]
+      },
+      "film-2": {
+        "role": "neutral",
+        "displayName": "Film Raised",
+        "canonical": "oklch(25.1% 0.005 248.0)",
+        "tonalRamp": [
+          "oklch(15% 0.002 248.0)",
+          "oklch(26% 0.003 248.0)",
+          "oklch(37% 0.004 248.0)",
+          "oklch(48% 0.004 248.0)",
+          "oklch(59% 0.005 248.0)",
+          "oklch(70% 0.004 248.0)",
+          "oklch(82% 0.003 248.0)",
+          "oklch(95% 0.002 248.0)"
+        ]
+      },
+      "sprocket": {
+        "role": "neutral",
+        "displayName": "Sprocket",
+        "canonical": "oklch(33.2% 0.008 255.6)",
+        "tonalRamp": [
+          "oklch(15% 0.004 255.6)",
+          "oklch(26% 0.005 255.6)",
+          "oklch(37% 0.006 255.6)",
+          "oklch(48% 0.007 255.6)",
+          "oklch(59% 0.008 255.6)",
+          "oklch(70% 0.007 255.6)",
+          "oklch(82% 0.005 255.6)",
+          "oklch(95% 0.004 255.6)"
+        ]
+      },
+      "edge": {
+        "role": "neutral",
+        "displayName": "Edge Print",
+        "canonical": "oklch(76.2% 0.007 160.0)",
+        "tonalRamp": [
+          "oklch(15% 0.003 160.0)",
+          "oklch(26% 0.004 160.0)",
+          "oklch(37% 0.005 160.0)",
+          "oklch(48% 0.006 160.0)",
+          "oklch(59% 0.007 160.0)",
+          "oklch(70% 0.006 160.0)",
+          "oklch(82% 0.005 160.0)",
+          "oklch(95% 0.003 160.0)"
+        ]
+      },
+      "pencil-red": {
+        "role": "primary",
+        "displayName": "Grease-Pencil Red",
+        "canonical": "oklch(58.4% 0.199 29.5)",
+        "tonalRamp": [
+          "oklch(15% 0.098 29.5)",
+          "oklch(26% 0.125 29.5)",
+          "oklch(37% 0.153 29.5)",
+          "oklch(48% 0.181 29.5)",
+          "oklch(59% 0.189 29.5)",
+          "oklch(70% 0.161 29.5)",
+          "oklch(82% 0.130 29.5)",
+          "oklch(95% 0.098 29.5)"
+        ]
+      },
+      "pencil-yellow": {
+        "role": "secondary",
+        "displayName": "Grease-Pencil Yellow",
+        "canonical": "oklch(83.3% 0.157 89.2)",
+        "tonalRamp": [
+          "oklch(15% 0.077 89.2)",
+          "oklch(26% 0.099 89.2)",
+          "oklch(37% 0.121 89.2)",
+          "oklch(48% 0.143 89.2)",
+          "oklch(59% 0.149 89.2)",
+          "oklch(70% 0.127 89.2)",
+          "oklch(82% 0.103 89.2)",
+          "oklch(95% 0.077 89.2)"
+        ]
+      },
+      "surface-on": {
+        "role": "neutral",
+        "displayName": "Pressed Surface",
+        "canonical": "oklch(100.0% 0.000 0.0)",
+        "tonalRamp": [
+          "oklch(15% 0.000 0.0)",
+          "oklch(26% 0.000 0.0)",
+          "oklch(37% 0.000 0.0)",
+          "oklch(48% 0.000 0.0)",
+          "oklch(59% 0.000 0.0)",
+          "oklch(70% 0.000 0.0)",
+          "oklch(82% 0.000 0.0)",
+          "oklch(95% 0.000 0.0)"
+        ]
+      },
+      "control-edge": {
+        "role": "neutral",
+        "displayName": "Control Edge",
+        "canonical": "oklch(63.2% 0.007 160.0)",
+        "tonalRamp": [
+          "oklch(15% 0.004 160.0)",
+          "oklch(26% 0.005 160.0)",
+          "oklch(37% 0.006 160.0)",
+          "oklch(48% 0.007 160.0)",
+          "oklch(59% 0.007 160.0)",
+          "oklch(70% 0.006 160.0)",
+          "oklch(82% 0.005 160.0)",
+          "oklch(95% 0.004 160.0)"
+        ]
+      },
+      "band-control-edge": {
+        "role": "neutral",
+        "displayName": "Band Control Edge",
+        "canonical": "oklch(56.0% 0.010 248.0)",
+        "tonalRamp": [
+          "oklch(15% 0.005 248.0)",
+          "oklch(26% 0.006 248.0)",
+          "oklch(37% 0.008 248.0)",
+          "oklch(48% 0.009 248.0)",
+          "oklch(59% 0.009 248.0)",
+          "oklch(70% 0.008 248.0)",
+          "oklch(82% 0.007 248.0)",
+          "oklch(95% 0.005 248.0)"
+        ]
+      },
+      "band-fg": {
+        "role": "neutral",
+        "displayName": "Band Text",
+        "canonical": "oklch(96.6% 0.003 128.5)",
+        "tonalRamp": [
+          "oklch(15% 0.001 128.5)",
+          "oklch(26% 0.002 128.5)",
+          "oklch(37% 0.002 128.5)",
+          "oklch(48% 0.003 128.5)",
+          "oklch(59% 0.003 128.5)",
+          "oklch(70% 0.002 128.5)",
+          "oklch(82% 0.002 128.5)",
+          "oklch(95% 0.001 128.5)"
+        ]
+      },
+      "swatch-ring": {
+        "role": "neutral",
+        "displayName": "Swatch Ring",
+        "canonical": "oklch(19.5% 0.003 248.0 / 0.52)",
+        "tonalRamp": [
+          "oklch(15% 0.001 248.0)",
+          "oklch(26% 0.002 248.0)",
+          "oklch(37% 0.002 248.0)",
+          "oklch(48% 0.002 248.0)",
+          "oklch(59% 0.002 248.0)",
+          "oklch(70% 0.002 248.0)",
+          "oklch(82% 0.002 248.0)",
+          "oklch(95% 0.001 248.0)"
+        ]
+      },
+      "primary-kbd-edge": {
+        "role": "neutral",
+        "displayName": "Key Cap Edge on Ink",
+        "canonical": "oklch(37.0% 0.007 248.0)",
+        "tonalRamp": [
+          "oklch(15% 0.003 248.0)",
+          "oklch(26% 0.004 248.0)",
+          "oklch(37% 0.005 248.0)",
+          "oklch(48% 0.006 248.0)",
+          "oklch(59% 0.006 248.0)",
+          "oklch(70% 0.005 248.0)",
+          "oklch(82% 0.004 248.0)",
+          "oklch(95% 0.003 248.0)"
+        ]
+      },
+      "primary-kbd-fg": {
+        "role": "neutral",
+        "displayName": "Key Cap Text on Ink",
+        "canonical": "oklch(87.6% 0.004 157.2)",
+        "tonalRamp": [
+          "oklch(15% 0.002 157.2)",
+          "oklch(26% 0.003 157.2)",
+          "oklch(37% 0.003 157.2)",
+          "oklch(48% 0.004 157.2)",
+          "oklch(59% 0.004 157.2)",
+          "oklch(70% 0.003 157.2)",
+          "oklch(82% 0.003 157.2)",
+          "oklch(95% 0.002 157.2)"
+        ]
+      },
+      "paper-dark": {
+        "role": "neutral",
+        "displayName": "Darkroom Table",
+        "canonical": "oklch(20.0% 0.004 264.5)",
+        "tonalRamp": [
+          "oklch(15% 0.002 264.5)",
+          "oklch(26% 0.003 264.5)",
+          "oklch(37% 0.003 264.5)",
+          "oklch(48% 0.004 264.5)",
+          "oklch(59% 0.004 264.5)",
+          "oklch(70% 0.003 264.5)",
+          "oklch(82% 0.003 264.5)",
+          "oklch(95% 0.002 264.5)"
+        ],
+        "theme": "dark"
+      },
+      "panel-paper-dark": {
+        "role": "neutral",
+        "displayName": "Panel (Dark)",
+        "canonical": "oklch(21.8% 0.006 271.1)",
+        "tonalRamp": [
+          "oklch(15% 0.003 271.1)",
+          "oklch(26% 0.004 271.1)",
+          "oklch(37% 0.005 271.1)",
+          "oklch(48% 0.006 271.1)",
+          "oklch(59% 0.006 271.1)",
+          "oklch(70% 0.005 271.1)",
+          "oklch(82% 0.004 271.1)",
+          "oklch(95% 0.003 271.1)"
+        ],
+        "theme": "dark"
+      },
+      "surface-dark": {
+        "role": "neutral",
+        "displayName": "Control Surface (Dark)",
+        "canonical": "oklch(25.6% 0.008 264.4)",
+        "tonalRamp": [
+          "oklch(15% 0.004 264.4)",
+          "oklch(26% 0.005 264.4)",
+          "oklch(37% 0.006 264.4)",
+          "oklch(48% 0.007 264.4)",
+          "oklch(59% 0.008 264.4)",
+          "oklch(70% 0.007 264.4)",
+          "oklch(82% 0.005 264.4)",
+          "oklch(95% 0.004 264.4)"
+        ],
+        "theme": "dark"
+      },
+      "surface-on-dark": {
+        "role": "neutral",
+        "displayName": "Pressed Surface (Dark)",
+        "canonical": "oklch(31.2% 0.008 255.6)",
+        "tonalRamp": [
+          "oklch(15% 0.004 255.6)",
+          "oklch(26% 0.005 255.6)",
+          "oklch(37% 0.006 255.6)",
+          "oklch(48% 0.008 255.6)",
+          "oklch(59% 0.008 255.6)",
+          "oklch(70% 0.007 255.6)",
+          "oklch(82% 0.006 255.6)",
+          "oklch(95% 0.004 255.6)"
+        ],
+        "theme": "dark"
+      },
+      "print-dark": {
+        "role": "neutral",
+        "displayName": "Print Paper (Dark)",
+        "canonical": "oklch(92.9% 0.005 117.9)",
+        "tonalRamp": [
+          "oklch(15% 0.003 117.9)",
+          "oklch(26% 0.003 117.9)",
+          "oklch(37% 0.004 117.9)",
+          "oklch(48% 0.005 117.9)",
+          "oklch(59% 0.005 117.9)",
+          "oklch(70% 0.004 117.9)",
+          "oklch(82% 0.004 117.9)",
+          "oklch(95% 0.003 117.9)"
+        ],
+        "theme": "dark"
+      },
+      "tray-dark": {
+        "role": "neutral",
+        "displayName": "Developing Tray (Dark)",
+        "canonical": "oklch(23.8% 0.006 258.4)",
+        "tonalRamp": [
+          "oklch(15% 0.003 258.4)",
+          "oklch(26% 0.004 258.4)",
+          "oklch(37% 0.005 258.4)",
+          "oklch(48% 0.006 258.4)",
+          "oklch(59% 0.006 258.4)",
+          "oklch(70% 0.005 258.4)",
+          "oklch(82% 0.004 258.4)",
+          "oklch(95% 0.003 258.4)"
+        ],
+        "theme": "dark"
+      },
+      "ink-dark": {
+        "role": "neutral",
+        "displayName": "Ink (Dark)",
+        "canonical": "oklch(94.4% 0.004 121.6)",
+        "tonalRamp": [
+          "oklch(15% 0.002 121.6)",
+          "oklch(26% 0.003 121.6)",
+          "oklch(37% 0.003 121.6)",
+          "oklch(48% 0.004 121.6)",
+          "oklch(59% 0.004 121.6)",
+          "oklch(70% 0.003 121.6)",
+          "oklch(82% 0.003 121.6)",
+          "oklch(95% 0.002 121.6)"
+        ],
+        "theme": "dark"
+      },
+      "ink-2-dark": {
+        "role": "neutral",
+        "displayName": "Ink Soft (Dark)",
+        "canonical": "oklch(87.0% 0.006 137.8)",
+        "tonalRamp": [
+          "oklch(15% 0.003 137.8)",
+          "oklch(26% 0.004 137.8)",
+          "oklch(37% 0.005 137.8)",
+          "oklch(48% 0.006 137.8)",
+          "oklch(59% 0.006 137.8)",
+          "oklch(70% 0.005 137.8)",
+          "oklch(82% 0.004 137.8)",
+          "oklch(95% 0.003 137.8)"
+        ],
+        "theme": "dark"
+      },
+      "graphite-dark": {
+        "role": "neutral",
+        "displayName": "Graphite (Dark)",
+        "canonical": "oklch(72.7% 0.007 160.0)",
+        "tonalRamp": [
+          "oklch(15% 0.004 160.0)",
+          "oklch(26% 0.005 160.0)",
+          "oklch(37% 0.005 160.0)",
+          "oklch(48% 0.006 160.0)",
+          "oklch(59% 0.007 160.0)",
+          "oklch(70% 0.006 160.0)",
+          "oklch(82% 0.005 160.0)",
+          "oklch(95% 0.004 160.0)"
+        ],
+        "theme": "dark"
+      },
+      "rule-dark": {
+        "role": "neutral",
+        "displayName": "Hairline (Dark)",
+        "canonical": "oklch(29.3% 0.008 264.4)",
+        "tonalRamp": [
+          "oklch(15% 0.004 264.4)",
+          "oklch(26% 0.005 264.4)",
+          "oklch(37% 0.006 264.4)",
+          "oklch(48% 0.007 264.4)",
+          "oklch(59% 0.007 264.4)",
+          "oklch(70% 0.006 264.4)",
+          "oklch(82% 0.005 264.4)",
+          "oklch(95% 0.004 264.4)"
+        ],
+        "theme": "dark"
+      },
+      "rule-2-dark": {
+        "role": "neutral",
+        "displayName": "Control Rule (Dark)",
+        "canonical": "oklch(35.9% 0.010 260.7)",
+        "tonalRamp": [
+          "oklch(15% 0.005 260.7)",
+          "oklch(26% 0.006 260.7)",
+          "oklch(37% 0.007 260.7)",
+          "oklch(48% 0.009 260.7)",
+          "oklch(59% 0.009 260.7)",
+          "oklch(70% 0.008 260.7)",
+          "oklch(82% 0.006 260.7)",
+          "oklch(95% 0.005 260.7)"
+        ],
+        "theme": "dark"
+      },
+      "control-edge-dark": {
+        "role": "neutral",
+        "displayName": "Control Edge (Dark)",
+        "canonical": "oklch(58.1% 0.011 252.9)",
+        "tonalRamp": [
+          "oklch(15% 0.005 252.9)",
+          "oklch(26% 0.007 252.9)",
+          "oklch(37% 0.009 252.9)",
+          "oklch(48% 0.010 252.9)",
+          "oklch(59% 0.010 252.9)",
+          "oklch(70% 0.009 252.9)",
+          "oklch(82% 0.007 252.9)",
+          "oklch(95% 0.005 252.9)"
+        ],
+        "theme": "dark"
+      },
+      "swatch-ring-dark": {
+        "role": "neutral",
+        "displayName": "Swatch Ring (Dark)",
+        "canonical": "oklch(100.0% 0.000 0.0 / 0.42)",
+        "tonalRamp": [
+          "oklch(15% 0.000 0.0)",
+          "oklch(26% 0.000 0.0)",
+          "oklch(37% 0.000 0.0)",
+          "oklch(48% 0.000 0.0)",
+          "oklch(59% 0.000 0.0)",
+          "oklch(70% 0.000 0.0)",
+          "oklch(82% 0.000 0.0)",
+          "oklch(95% 0.000 0.0)"
+        ],
+        "theme": "dark"
+      },
+      "film-dark": {
+        "role": "neutral",
+        "displayName": "Film Black (Dark)",
+        "canonical": "oklch(14.5% 0.002 286.1)",
+        "tonalRamp": [
+          "oklch(15% 0.001 286.1)",
+          "oklch(26% 0.001 286.1)",
+          "oklch(37% 0.002 286.1)",
+          "oklch(48% 0.002 286.1)",
+          "oklch(59% 0.002 286.1)",
+          "oklch(70% 0.002 286.1)",
+          "oklch(82% 0.001 286.1)",
+          "oklch(95% 0.001 286.1)"
+        ],
+        "theme": "dark"
+      },
+      "film-2-dark": {
+        "role": "neutral",
+        "displayName": "Film Raised (Dark)",
+        "canonical": "oklch(21.4% 0.006 271.1)",
+        "tonalRamp": [
+          "oklch(15% 0.003 271.1)",
+          "oklch(26% 0.004 271.1)",
+          "oklch(37% 0.005 271.1)",
+          "oklch(48% 0.006 271.1)",
+          "oklch(59% 0.006 271.1)",
+          "oklch(70% 0.005 271.1)",
+          "oklch(82% 0.004 271.1)",
+          "oklch(95% 0.003 271.1)"
+        ],
+        "theme": "dark"
+      },
+      "film-on-dark": {
+        "role": "neutral",
+        "displayName": "Pressed Band Segment (Dark)",
+        "canonical": "oklch(31.2% 0.008 255.6)",
+        "tonalRamp": [
+          "oklch(15% 0.004 255.6)",
+          "oklch(26% 0.005 255.6)",
+          "oklch(37% 0.006 255.6)",
+          "oklch(48% 0.008 255.6)",
+          "oklch(59% 0.008 255.6)",
+          "oklch(70% 0.007 255.6)",
+          "oklch(82% 0.006 255.6)",
+          "oklch(95% 0.004 255.6)"
+        ],
+        "theme": "dark"
+      },
+      "sprocket-dark": {
+        "role": "neutral",
+        "displayName": "Sprocket (Dark)",
+        "canonical": "oklch(35.9% 0.010 260.7)",
+        "tonalRamp": [
+          "oklch(15% 0.005 260.7)",
+          "oklch(26% 0.006 260.7)",
+          "oklch(37% 0.007 260.7)",
+          "oklch(48% 0.009 260.7)",
+          "oklch(59% 0.009 260.7)",
+          "oklch(70% 0.008 260.7)",
+          "oklch(82% 0.006 260.7)",
+          "oklch(95% 0.005 260.7)"
+        ],
+        "theme": "dark"
+      },
+      "band-edge-dark": {
+        "role": "neutral",
+        "displayName": "Band Edge (Dark)",
+        "canonical": "oklch(26.4% 0.006 258.4)",
+        "tonalRamp": [
+          "oklch(15% 0.003 258.4)",
+          "oklch(26% 0.004 258.4)",
+          "oklch(37% 0.005 258.4)",
+          "oklch(48% 0.006 258.4)",
+          "oklch(59% 0.006 258.4)",
+          "oklch(70% 0.005 258.4)",
+          "oklch(82% 0.004 258.4)",
+          "oklch(95% 0.003 258.4)"
+        ],
+        "theme": "dark"
+      },
+      "edge-dark": {
+        "role": "neutral",
+        "displayName": "Edge Print (Dark)",
+        "canonical": "oklch(66.4% 0.008 164.8)",
+        "tonalRamp": [
+          "oklch(15% 0.004 164.8)",
+          "oklch(26% 0.005 164.8)",
+          "oklch(37% 0.006 164.8)",
+          "oklch(48% 0.007 164.8)",
+          "oklch(59% 0.008 164.8)",
+          "oklch(70% 0.007 164.8)",
+          "oklch(82% 0.005 164.8)",
+          "oklch(95% 0.004 164.8)"
+        ],
+        "theme": "dark"
+      },
+      "pencil-red-dark": {
+        "role": "primary",
+        "displayName": "Grease-Pencil Red (Dark)",
+        "canonical": "oklch(69.2% 0.198 29.2)",
+        "tonalRamp": [
+          "oklch(15% 0.099 29.2)",
+          "oklch(26% 0.126 29.2)",
+          "oklch(37% 0.153 29.2)",
+          "oklch(48% 0.181 29.2)",
+          "oklch(59% 0.188 29.2)",
+          "oklch(70% 0.161 29.2)",
+          "oklch(82% 0.131 29.2)",
+          "oklch(95% 0.099 29.2)"
+        ],
+        "theme": "dark"
+      },
+      "pencil-yellow-dark": {
+        "role": "secondary",
+        "displayName": "Grease-Pencil Yellow (Dark)",
+        "canonical": "oklch(85.2% 0.147 88.1)",
+        "tonalRamp": [
+          "oklch(15% 0.073 88.1)",
+          "oklch(26% 0.094 88.1)",
+          "oklch(37% 0.114 88.1)",
+          "oklch(48% 0.134 88.1)",
+          "oklch(59% 0.139 88.1)",
+          "oklch(70% 0.119 88.1)",
+          "oklch(82% 0.097 88.1)",
+          "oklch(95% 0.073 88.1)"
+        ],
+        "theme": "dark"
+      },
+      "primary-fg-dark": {
+        "role": "neutral",
+        "displayName": "Ink Button Text (Dark)",
+        "canonical": "oklch(20.0% 0.004 264.5)",
+        "tonalRamp": [
+          "oklch(15% 0.002 264.5)",
+          "oklch(26% 0.003 264.5)",
+          "oklch(37% 0.003 264.5)",
+          "oklch(48% 0.004 264.5)",
+          "oklch(59% 0.004 264.5)",
+          "oklch(70% 0.003 264.5)",
+          "oklch(82% 0.003 264.5)",
+          "oklch(95% 0.002 264.5)"
+        ],
+        "theme": "dark"
+      },
+      "primary-kbd-bg-dark": {
+        "role": "neutral",
+        "displayName": "Key Cap on Ink (Dark)",
+        "canonical": "oklch(87.6% 0.006 128.5)",
+        "tonalRamp": [
+          "oklch(15% 0.003 128.5)",
+          "oklch(26% 0.004 128.5)",
+          "oklch(37% 0.005 128.5)",
+          "oklch(48% 0.005 128.5)",
+          "oklch(59% 0.006 128.5)",
+          "oklch(70% 0.005 128.5)",
+          "oklch(82% 0.004 128.5)",
+          "oklch(95% 0.003 128.5)"
+        ],
+        "theme": "dark"
+      },
+      "primary-kbd-edge-dark": {
+        "role": "neutral",
+        "displayName": "Key Cap Edge on Ink (Dark)",
+        "canonical": "oklch(79.2% 0.006 137.8)",
+        "tonalRamp": [
+          "oklch(15% 0.003 137.8)",
+          "oklch(26% 0.004 137.8)",
+          "oklch(37% 0.005 137.8)",
+          "oklch(48% 0.006 137.8)",
+          "oklch(59% 0.006 137.8)",
+          "oklch(70% 0.005 137.8)",
+          "oklch(82% 0.004 137.8)",
+          "oklch(95% 0.003 137.8)"
+        ],
+        "theme": "dark"
+      },
+      "primary-kbd-fg-dark": {
+        "role": "neutral",
+        "displayName": "Key Cap Text on Ink (Dark)",
+        "canonical": "oklch(29.2% 0.005 248.0)",
+        "tonalRamp": [
+          "oklch(15% 0.002 248.0)",
+          "oklch(26% 0.003 248.0)",
+          "oklch(37% 0.004 248.0)",
+          "oklch(48% 0.004 248.0)",
+          "oklch(59% 0.004 248.0)",
+          "oklch(70% 0.004 248.0)",
+          "oklch(82% 0.003 248.0)",
+          "oklch(95% 0.002 248.0)"
+        ],
+        "theme": "dark"
+      },
+      "control-edge-hover": {
+        "role": "neutral",
+        "displayName": "Control Edge (hover)",
+        "canonical": "oklch(56.7% 0.008 159.9)",
+        "tonalRamp": [
+          "oklch(15% 0.004 160.0)",
+          "oklch(26% 0.005 160.0)",
+          "oklch(37% 0.006 160.0)",
+          "oklch(48% 0.007 160.0)",
+          "oklch(59% 0.007 160.0)",
+          "oklch(70% 0.006 160.0)",
+          "oklch(82% 0.005 160.0)",
+          "oklch(95% 0.004 160.0)"
+        ]
+      },
+      "control-edge-hover-dark": {
+        "role": "neutral",
+        "displayName": "Control Edge (hover, dark)",
+        "canonical": "oklch(58.1% 0.011 252.9)",
+        "tonalRamp": [
+          "oklch(15% 0.005 252.9)",
+          "oklch(26% 0.007 252.9)",
+          "oklch(37% 0.009 252.9)",
+          "oklch(48% 0.010 252.9)",
+          "oklch(59% 0.010 252.9)",
+          "oklch(70% 0.009 252.9)",
+          "oklch(82% 0.007 252.9)",
+          "oklch(95% 0.005 252.9)"
+        ],
+        "theme": "dark"
+      }
+    },
+    "typographyMeta": {
+      "display": {
+        "displayName": "Wordmark",
+        "purpose": "The wordmark on the film band only."
+      },
+      "headline": {
+        "displayName": "Headline",
+        "purpose": "Panel and sheet titles."
+      },
+      "title": {
+        "displayName": "Title",
+        "purpose": "Style names and 48px action buttons."
+      },
+      "body": {
+        "displayName": "Body",
+        "purpose": "Default interface text, tabular numerals."
+      },
+      "body-sm": {
+        "displayName": "Body Small",
+        "purpose": "Part lists, subtitles, hints, in graphite."
+      },
+      "control": {
+        "displayName": "Control",
+        "purpose": "Segments, small buttons, band controls, tab pills."
+      },
+      "section-title": {
+        "displayName": "Section Title",
+        "purpose": "Customize-panel part headings, uppercase, ink."
+      },
+      "label": {
+        "displayName": "Edge Print Label",
+        "purpose": "Uppercase tracked labels for control groups and frame/seed; key caps."
+      },
+      "frame-no": {
+        "displayName": "Frame Number",
+        "purpose": "Numbers under film-strip frames."
+      }
+    },
+    "shadows": [
+      {
+        "name": "print",
+        "value": "0 1px 3px rgb(20 21 22/.12), 0 18px 40px -12px rgb(20 21 22/.24)",
+        "purpose": "The hero print only."
+      },
+      {
+        "name": "print-sm",
+        "value": "0 1px 2px rgb(20 21 22/.14), 0 3px 8px -2px rgb(20 21 22/.12)",
+        "purpose": "Thumbnail prints, current style row or chip, active segment."
+      },
+      {
+        "name": "ink-button",
+        "value": "0 1px 2px rgb(20 21 22/.3), 0 8px 20px -8px rgb(20 21 22/.45)",
+        "purpose": "The primary ink button."
+      },
+      {
+        "name": "sheet",
+        "value": "0 -1px 0 #d9dcd9, 0 -12px 32px -12px rgb(20 21 22/.25)",
+        "purpose": "Phone customize sheet."
+      },
+      {
+        "name": "print-dark",
+        "value": "0 1px 3px rgb(0 0 0/.5), 0 22px 44px -14px rgb(0 0 0/.7)",
+        "purpose": "The hero print in dark."
+      },
+      {
+        "name": "print-sm-dark",
+        "value": "0 1px 2px rgb(0 0 0/.5), 0 3px 8px -2px rgb(0 0 0/.45)",
+        "purpose": "Thumbnail prints, current row or chip, active segment in dark."
+      },
+      {
+        "name": "ink-button-dark",
+        "value": "0 1px 2px rgb(0 0 0/.5), 0 8px 20px -8px rgb(0 0 0/.6)",
+        "purpose": "The primary button and toast in dark."
+      },
+      {
+        "name": "strip-shadow",
+        "value": "none",
+        "purpose": "History strip in light: film lies flat on paper."
+      },
+      {
+        "name": "strip-shadow-dark",
+        "value": "inset 0 0 0 1px #3a3d42, 0 12px 28px -14px rgb(0 0 0/.85)",
+        "purpose": "History strip in dark only: sprocket-tone edge and low drop so film separates from the dark ground."
+      },
+      {
+        "name": "swatch-ring",
+        "value": "inset 0 0 0 1px rgb(20 21 22/.52)",
+        "purpose": "Edge on colour swatches in light (about 3.6:1 on panel paper)."
+      },
+      {
+        "name": "swatch-ring-dark",
+        "value": "inset 0 0 0 1px rgb(255 255 255/.42)",
+        "purpose": "Edge on colour swatches in dark (4.06:1 on the dark panel)."
+      },
+      {
+        "name": "primary-hover-ring",
+        "value": "var(--shadow-primary), 0 0 0 3px color-mix(in srgb, var(--primary-bg) 22%, transparent)",
+        "purpose": "Ink button hover: its own colour as a 3px ring."
+      }
+    ],
+    "motion": [
+      {
+        "name": "ease-out",
+        "value": "cubic-bezier(.16,1,.3,1)",
+        "purpose": "Movement and drawing: strip FLIP, frame landing, mark draw-on, grid entrance, toast rise."
+      },
+      {
+        "name": "ease-develop",
+        "value": "cubic-bezier(.33,0,.2,1)",
+        "purpose": "The hero print developing from overexposure."
+      },
+      {
+        "name": "dur-fast",
+        "value": "120ms",
+        "purpose": "Loop lift, print swap, control state transitions, toast fade; every reduced-motion fade."
+      },
+      {
+        "name": "dur-base",
+        "value": "240ms",
+        "purpose": "Loop, underline and crop-mark draw-on; toast rise."
+      },
+      {
+        "name": "dur-slow",
+        "value": "360ms",
+        "purpose": "Strip shift by FLIP and the new frame landing (28px from the right)."
+      },
+      {
+        "name": "dur-develop",
+        "value": "560ms",
+        "purpose": "Print develop: brightness 1.75, contrast .55, saturate .3 settling to none."
+      },
+      {
+        "name": "grid-entrance",
+        "value": "300ms ease-out, delays 0/40/80ms",
+        "purpose": "Contact-sheet strips rise 10px and fade in, staggered."
+      },
+      {
+        "name": "toast-hold",
+        "value": "1600ms",
+        "purpose": "How long the Copy SVG toast stays before hiding."
+      },
+      {
+        "name": "reduced-motion",
+        "value": "prefers-reduced-motion: reduce",
+        "purpose": "No slide or draw; state changes become 120ms fades; no crop redraw; toast does not move."
+      }
+    ],
+    "breakpoints": [
+      {
+        "name": "phone",
+        "value": "390px"
+      },
+      {
+        "name": "desktop",
+        "value": "1440px"
+      }
+    ],
+    "openDecisions": [
+      "Product name: 'Avatar Playground' is a working name; the final name is unresolved.",
+      "中文 strings: the language switch exists but Chinese copy is not written."
+    ],
+    "theme": {
+      "modes": [
+        "light",
+        "dark"
+      ],
+      "default": "follow OS (prefers-color-scheme)",
+      "storageKey": "avatar-theme",
+      "override": "Stored when the visitor picks a theme; picking the OS's own theme clears it.",
+      "desktopControl": "Two-segment sun/moon toggle on the band.",
+      "phoneControl": "Single 36px icon button on the band showing the current theme."
+    }
+  },
+  "components": [
+    {
+      "name": "Primary Button",
+      "kind": "button",
+      "refersTo": "button-primary",
+      "description": "The ink Randomize button with its key cap; one per view.",
+      "html": "<button class=\"ds-btn-primary\"><svg width=\"20\" height=\"20\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" aria-hidden=\"true\"><rect width=\"18\" height=\"18\" x=\"3\" y=\"3\" rx=\"4\"/><path d=\"M8 8h.01M16 8h.01M12 12h.01M8 16h.01M16 16h.01\" stroke-width=\"3\"/></svg>Randomize<span class=\"ds-kbd-dark\">Space</span></button>",
+      "css": ".ds-btn-primary{height:48px;display:inline-flex;align-items:center;gap:10px;padding:0 16px 0 20px;border-radius:10px;border:1px solid #141516;background:#141516;color:#f3f4f2;font-family:Barlow,system-ui,sans-serif;font-weight:600;font-size:15px;font-variant-numeric:tabular-nums;box-shadow:0 1px 2px rgb(20 21 22/.3),0 8px 20px -8px rgb(20 21 22/.45);cursor:pointer;transition:box-shadow 120ms}.ds-btn-primary:hover{box-shadow:0 1px 2px rgb(20 21 22/.3),0 8px 20px -8px rgb(20 21 22/.45),0 0 0 3px color-mix(in srgb,#141516 22%,transparent)}.ds-btn-primary:active{transform:translateY(1px)}.ds-btn-primary:focus-visible{outline:2px solid #141516;outline-offset:2px}.ds-kbd-dark{font-family:'Barlow Condensed',system-ui,sans-serif;font-weight:600;font-size:12px;line-height:1;letter-spacing:.04em;padding:3px 6px;border:1px solid #3d4043;border-bottom-width:2px;border-radius:4px;background:#2a2c2e;color:#d4d7d5}"
+    },
+    {
+      "name": "Secondary Button",
+      "kind": "button",
+      "refersTo": "button-secondary",
+      "description": "Bordered print-white action (PNG, Copy SVG, Keep frame).",
+      "html": "<button class=\"ds-btn\"><svg width=\"18\" height=\"18\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" aria-hidden=\"true\"><path d=\"M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4\"/><path d=\"m7 10 5 5 5-5\"/><path d=\"M12 15V3\"/></svg>PNG</button>",
+      "css": ".ds-btn{height:48px;display:inline-flex;align-items:center;gap:10px;padding:0 18px;border-radius:10px;border:1px solid #868b88;background:#fff;color:#141516;font-family:Barlow,system-ui,sans-serif;font-weight:600;font-size:15px;cursor:pointer;transition:background-color 120ms,border-color 120ms}.ds-btn:hover{background:#e6e8e5;border-color:#737875}.ds-btn:active{transform:translateY(1px)}.ds-btn:focus-visible{outline:2px solid #141516;outline-offset:2px}"
+    },
+    {
+      "name": "Toolbar Icon Button",
+      "kind": "button",
+      "refersTo": "button-icon",
+      "description": "40px bordered icon button for undo, redo, flip, reset.",
+      "html": "<button class=\"ds-btn-icon\" aria-label=\"Undo\"><svg width=\"18\" height=\"18\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" aria-hidden=\"true\"><path d=\"M9 14 4 9l5-5\"/><path d=\"M4 9h10.5a5.5 5.5 0 0 1 0 11H11\"/></svg></button>",
+      "css": ".ds-btn-icon{width:40px;height:40px;display:grid;place-items:center;border:1px solid #868b88;border-radius:10px;background:#fff;color:#2a2c2e;cursor:pointer;transition:background-color 120ms}.ds-btn-icon:hover{background:#e6e8e5;border-color:#737875}.ds-btn-icon:active{transform:translateY(1px)}.ds-btn-icon:focus-visible{outline:2px solid #141516;outline-offset:2px}"
+    },
+    {
+      "name": "Lock Toggle",
+      "kind": "button",
+      "refersTo": "button-mini-pressed",
+      "description": "28px pressed toggle in each part header; ink when locked.",
+      "html": "<span class=\"ds-row\"><button class=\"ds-mini\" aria-pressed=\"false\" aria-label=\"Lock Eyes\"><svg width=\"15\" height=\"15\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" aria-hidden=\"true\"><rect width=\"16\" height=\"10\" x=\"4\" y=\"11\" rx=\"2\"/><path d=\"M8 11V7a4 4 0 0 1 7.8-1.3\"/></svg></button><button class=\"ds-mini\" aria-pressed=\"true\" aria-label=\"Unlock Skin\"><svg width=\"15\" height=\"15\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" aria-hidden=\"true\"><rect width=\"16\" height=\"10\" x=\"4\" y=\"11\" rx=\"2\"/><path d=\"M8 11V7a4 4 0 0 1 8 0v4\"/></svg></button></span>",
+      "css": ".ds-row{display:inline-flex;gap:4px}.ds-mini{width:28px;height:28px;display:grid;place-items:center;border:1px solid #868b88;border-radius:7px;background:#fff;color:#555a58;cursor:pointer;transition:background-color 120ms}.ds-mini:hover{background:#e6e8e5;border-color:#737875}.ds-mini[aria-pressed=true],.ds-mini[aria-pressed=true]:hover{background:#141516;border-color:#141516;color:#f3f4f2}.ds-mini:focus-visible{outline:2px solid #141516;outline-offset:2px}"
+    },
+    {
+      "name": "Segmented Control",
+      "kind": "chip",
+      "refersTo": "segmented",
+      "description": "Tray-track toggle (Single/Grid, This style/Any style).",
+      "html": "<div class=\"ds-seg\" role=\"group\" aria-label=\"Randomize scope\"><button aria-pressed=\"true\">This style</button><button aria-pressed=\"false\">Any style</button></div>",
+      "css": ".ds-seg{display:inline-flex;padding:3px;border-radius:10px;background:#e6e8e5;border:1px solid #d9dcd9}.ds-seg button{height:30px;padding:0 12px;border:0;border-radius:7px;background:none;color:#555a58;font-family:Barlow,system-ui,sans-serif;font-weight:600;font-size:13px;cursor:pointer}.ds-seg button[aria-pressed=true]{background:#fff;color:#141516;box-shadow:0 1px 2px rgb(20 21 22/.14),0 3px 8px -2px rgb(20 21 22/.12)}.ds-seg button:focus-visible{outline:2px solid #141516;outline-offset:2px}"
+    },
+    {
+      "name": "Theme Toggle (band)",
+      "kind": "nav",
+      "refersTo": "segmented-band",
+      "description": "Desktop sun/moon segmented control on the film band; pressed segment is the current theme. The phone uses one 36px icon button instead.",
+      "html": "<div class=\"ds-band\"><div class=\"ds-seg-dark\" role=\"group\" aria-label=\"Theme\"><button aria-pressed=\"true\" aria-label=\"Light theme\"><svg width=\"15\" height=\"15\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" aria-hidden=\"true\"><circle cx=\"12\" cy=\"12\" r=\"4\"/><path d=\"M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41\"/></svg></button><button aria-pressed=\"false\" aria-label=\"Dark theme\"><svg width=\"15\" height=\"15\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" aria-hidden=\"true\"><path d=\"M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z\"/></svg></button></div><div class=\"ds-seg-dark\" role=\"group\" aria-label=\"Language\"><button aria-pressed=\"true\">EN</button><button aria-pressed=\"false\">中文</button></div></div>",
+      "css": ".ds-band{display:flex;gap:8px;padding:12px 16px;background:#141516}.ds-seg-dark{display:inline-flex;padding:3px;border-radius:10px;background:#202224;border:1px solid #70757a}.ds-seg-dark button{height:28px;display:inline-grid;place-items:center;padding:0 10px;border:0;border-radius:6px;background:none;color:#aeb3b0;font-family:Barlow,system-ui,sans-serif;font-weight:600;font-size:13px;cursor:pointer}.ds-seg-dark button[aria-pressed=true]{background:#33363a;color:#f3f4f2;box-shadow:inset 0 0 0 1px #70757a}.ds-seg-dark button:focus-visible{outline:2px solid #f3f4f2;outline-offset:2px}"
+    },
+    {
+      "name": "Part Section Header",
+      "kind": "custom",
+      "refersTo": "button-mini",
+      "description": "Edge-print section title with count; a locked part gets a yellow grease-pencil underline beside the pressed lock.",
+      "html": "<div class=\"ds-sec\"><span class=\"ds-sec-title\">Skin<svg class=\"ds-ul\" width=\"40\" height=\"12\" viewBox=\"-4 0 40 12\" aria-hidden=\"true\"><path d=\"M-2,5 C11,4 22,7 34,6\" fill=\"none\" stroke=\"#f1c232\" stroke-width=\"4\" stroke-linecap=\"round\"/><path d=\"M0,7.5 C11,7 22,8.5 33,8\" fill=\"none\" stroke=\"#f1c232\" stroke-width=\"3\" stroke-linecap=\"round\"/></svg></span><span class=\"ds-count\">5</span><button class=\"ds-lock\" aria-pressed=\"true\" aria-label=\"Unlock Skin\"><svg width=\"15\" height=\"15\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" aria-hidden=\"true\"><rect width=\"16\" height=\"10\" x=\"4\" y=\"11\" rx=\"2\"/><path d=\"M8 11V7a4 4 0 0 1 8 0v4\"/></svg></button></div>",
+      "css": ".ds-sec{display:flex;align-items:center;gap:8px;height:28px;width:260px}.ds-sec-title{position:relative;font-family:'Barlow Condensed',system-ui,sans-serif;font-weight:600;font-size:13px;line-height:1;letter-spacing:.07em;text-transform:uppercase;color:#141516}.ds-ul{position:absolute;left:0;bottom:-10px;pointer-events:none}.ds-count{font-family:Barlow,system-ui,sans-serif;font-size:12px;color:#555a58}.ds-lock{margin-left:auto;width:28px;height:28px;display:grid;place-items:center;border:1px solid #141516;border-radius:7px;background:#141516;color:#f3f4f2;cursor:pointer}.ds-lock:hover{background:#141516}.ds-lock:focus-visible{outline:2px solid #141516;outline-offset:2px}"
+    },
+    {
+      "name": "Option Tile",
+      "kind": "card",
+      "refersTo": "option-tile",
+      "description": "56px tile previewing the visitor's own avatar; the pick is circled in red grease pencil.",
+      "html": "<div class=\"ds-tiles\" role=\"radiogroup\" aria-label=\"Hair\"><button class=\"ds-tile\" role=\"radio\" aria-checked=\"false\" aria-label=\"Bob\"></button><button class=\"ds-tile\" role=\"radio\" aria-checked=\"true\" aria-label=\"Bun\"><svg class=\"ds-loop\" width=\"76\" height=\"76\" viewBox=\"0 0 76 76\" aria-hidden=\"true\"><path d=\"M15.200000000000001,12.4 C30.800000000000004,-1 74,11.200000000000001 73,40.800000000000004 C72,72 16.8,75 3,43.6 C-1,16.8 19.599999999999998,2 49.199999999999996,6\" fill=\"none\" stroke=\"#d8382a\" stroke-width=\"2.6\" stroke-linecap=\"round\"/></svg></button></div>",
+      "css": ".ds-tiles{display:flex;gap:8px;padding:12px}.ds-tile{position:relative;width:56px;height:56px;padding:0;border:1px solid #d9dcd9;border-radius:6px;background:linear-gradient(#e6e0ff,#e6e0ff) center/70% 70% no-repeat,#fff;cursor:pointer;transition:border-color 120ms}.ds-tile:hover{border-color:#868b88}.ds-tile:focus-visible{outline:2px solid #141516;outline-offset:2px}.ds-loop{position:absolute;left:-10px;top:-10px;pointer-events:none;overflow:visible}"
+    },
+    {
+      "name": "Style Rail Row",
+      "kind": "nav",
+      "refersTo": "style-row-current",
+      "description": "Rail entry: print thumbnail, name, part list, shortcut key cap; the current row lifts and its print is circled.",
+      "html": "<nav class=\"ds-rail\" aria-label=\"Styles\"><button class=\"ds-style\" aria-current=\"true\"><span class=\"ds-print\"><svg class=\"ds-loop\" width=\"70\" height=\"70\" viewBox=\"0 0 70 70\" aria-hidden=\"true\"><path d=\"M14,11.5 C27.500000000000004,-1 68,10 67,37.5 C66,66 15,69 3,40 C-1,15 17.5,2 45,6\" fill=\"none\" stroke=\"#d8382a\" stroke-width=\"2.6\" stroke-linecap=\"round\"/></svg></span><span><span class=\"ds-name\">Flat Cartoon</span><br><span class=\"ds-parts\">skin · hair · eyes · mouth</span></span><span class=\"ds-kbd\">1</span></button><button class=\"ds-style\" aria-current=\"false\"><span class=\"ds-print\"></span><span><span class=\"ds-name\">Pixel Art</span><br><span class=\"ds-parts\">skin · hair · eyes · shirt</span></span><span class=\"ds-kbd\">2</span></button></nav>",
+      "css": ".ds-rail{width:264px;padding:12px;background:#f3f4f2;display:flex;flex-direction:column;gap:4px}.ds-style{position:relative;display:grid;grid-template-columns:56px 1fr auto;gap:12px;align-items:center;padding:8px;border-radius:10px;border:0;background:none;text-align:left;color:#141516;font-family:Barlow,system-ui,sans-serif;font-size:14px;cursor:pointer}.ds-style[aria-current=true]{background:#fff;box-shadow:0 1px 2px rgb(20 21 22/.14),0 3px 8px -2px rgb(20 21 22/.12)}.ds-style:focus-visible{outline:2px solid #141516;outline-offset:2px}.ds-print{position:relative;display:block;width:56px;height:56px;background:linear-gradient(#e6e0ff,#e6e0ff) center/50px 50px no-repeat,#fff;border-radius:3px;box-shadow:0 1px 2px rgb(20 21 22/.14),0 3px 8px -2px rgb(20 21 22/.12)}.ds-print .ds-loop{position:absolute;left:-7px;top:-7px;overflow:visible}.ds-name{font-weight:600;font-size:15px;line-height:1.25}.ds-parts{font-size:12.5px;line-height:1.35;color:#555a58}.ds-kbd{font-family:'Barlow Condensed',system-ui,sans-serif;font-weight:600;font-size:12px;line-height:1;letter-spacing:.04em;min-width:20px;padding:3px 6px;border:1px solid #c4c8c5;border-bottom-width:2px;border-radius:4px;background:#fff;color:#555a58;text-align:center}"
+    },
+    {
+      "name": "Film Strip History",
+      "kind": "custom",
+      "refersTo": "film-strip",
+      "description": "Signature: film-black band with sprocket rows; numbered frames, current frame circled in red; focus ring in band text.",
+      "html": "<div class=\"ds-strip\"><button class=\"ds-frame\" aria-current=\"false\" aria-label=\"Frame 21\"><span class=\"ds-shot\"></span><span class=\"ds-no\">21</span></button><button class=\"ds-frame\" aria-current=\"false\" aria-label=\"Frame 22\"><span class=\"ds-shot\"></span><span class=\"ds-no\">22</span></button><button class=\"ds-frame\" aria-current=\"false\" aria-label=\"Frame 23\"><span class=\"ds-shot\"></span><span class=\"ds-no\">23</span></button><button class=\"ds-frame\" aria-current=\"true\" aria-label=\"Frame 24\"><span class=\"ds-shot\"><svg class=\"ds-loop\" width=\"84\" height=\"84\" viewBox=\"0 0 84 84\" aria-hidden=\"true\"><path d=\"M16.8,13.6 C35.2,-1 82,12.8 81,45.2 C80,80 19.2,83 3,48.4 C-1,19.2 22.4,2 54.8,6\" fill=\"none\" stroke=\"#d8382a\" stroke-width=\"2.6\" stroke-linecap=\"round\"/></svg></span><span class=\"ds-no\">24</span></button></div>",
+      "css": ".ds-strip{position:relative;display:flex;gap:12px;justify-content:flex-end;padding:20px 16px;background:#141516;border-radius:6px;overflow:hidden}.ds-strip::before,.ds-strip::after{content:\"\";position:absolute;left:12px;right:12px;height:6px;background:url(\"data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='19' height='6'%3E%3Crect width='9' height='6' rx='1.5' fill='%2333363a'/%3E%3C/svg%3E\") repeat-x left center/19px 6px}.ds-strip::before{top:7px}.ds-strip::after{bottom:7px}.ds-frame{position:relative;display:flex;flex-direction:column;align-items:center;gap:6px;border:0;background:none;padding:0;cursor:pointer}.ds-frame:focus-visible{outline:2px solid #f3f4f2;outline-offset:2px}.ds-frame:hover .ds-shot{filter:brightness(1.08)}.ds-shot{position:relative;display:block;width:64px;height:64px;border-radius:6px;background:#d4eeff}.ds-shot .ds-loop{position:absolute;left:-10px;top:-10px;overflow:visible}.ds-no{font-family:'Barlow Condensed',system-ui,sans-serif;font-weight:600;font-size:11px;line-height:1;letter-spacing:.06em;color:#aeb3b0;font-variant-numeric:tabular-nums}.ds-frame[aria-current=true] .ds-no{color:#f3f4f2}"
+    }
+  ],
+  "narrative": {
+    "northStar": "The Contact Sheet",
+    "overview": "The playground is a photographer's contact sheet. Work areas are photo paper, the top bar and the history are bands of film black with sprocket holes, and every roll lands as a numbered frame. The visitor edits the way a photographer edits proofs: a red grease-pencil loop circles the current pick, yellow grease pencil underlines what is kept. The chrome is black, white and graphite so the avatars carry all of the colour.\n\nThis is an Operate surface. The world lends type, palette, density and one signature move (the grease-pencil marks on a film strip); navigation and controls are standard web components with standard semantics (radio groups, pressed toggles, segmented controls). Hand marks annotate controls and never replace them. Density is high: at 1440x900 every part of a style fits the customize panel without scrolling, on one 4/8px module that sizes tiles, frames, swatches and gaps.\n\nThe world has two themes, and the owner decided both. Light is photo paper with film-black bands; dark is the same sheet viewed on a darkroom table: the ground and chrome go to film, prints stay paper, and the grease pencils are brightened. The page follows the OS until the visitor picks a theme (see Theme Model under Colors). The design artifacts live outside the repo in `../docs/avatar/mockups/`. Two worlds were rendered and not chosen, Departure Board and Flip Book (`../docs/avatar/mockups/worlds/`); their tokens are not part of this system.",
+    "keyCharacteristics": [
+      "Photo-paper work areas, film-black bands, graphite chrome; avatars are the only colour.",
+      "Red grease pencil marks the current pick; yellow grease pencil marks locks. Each colour does one job.",
+      "Barlow Condensed edge-print labels and frame numbers over Barlow interface text, tabular numerals throughout.",
+      "Avatars sit on white \"prints\" with soft paper shadows; the export frame carries red crop marks.",
+      "Standard controls (Lucide stroke icons, segmented toggles, bordered buttons), annotated rather than restyled.",
+      "Light and dark from one token set: dark swaps the ground to film and keeps prints paper; every bordered control holds 3:1 in both.",
+      "Motion has one focal moment, the roll: the strip advances a frame and the new print develops from overexposure."
+    ],
+    "rules": [
+      {
+        "name": "The Avatars Carry The Colour Rule",
+        "body": "Chrome is paper, ink, film and graphite. The only hues on screen are the avatars, their swatches, and the two grease pencils.",
+        "section": "colors"
+      },
+      {
+        "name": "The One Job Per Pencil Rule",
+        "body": "Red means \"current pick\". Yellow means \"locked\". Never use either for emphasis, errors, links, hover or decoration.",
+        "section": "colors"
+      },
+      {
+        "name": "The 3:1 Edge Rule",
+        "body": "Every bordered control and every swatch ring holds at least 3:1 against the ground it sits on, in both themes. Borders of controls use the control edge (on paper) or the band control edge (on film), never the hairline; hairlines are for dividers and resting tile borders only.",
+        "section": "colors"
+      },
+      {
+        "name": "The Annotation Rule",
+        "body": "Grease-pencil marks sit on top of standard controls (`aria-hidden`, pointer-events none) and never carry state alone: a locked part also has the ink pressed lock toggle, a pick also has `aria-checked` or `aria-current`.",
+        "section": "colors"
+      },
+      {
+        "name": "The Edge Print Rule",
+        "body": "Condensed uppercase type names things the way film edge print does: a section, a frame, a seed. It labels a control group; it never sits above a headline as decoration.",
+        "section": "typography"
+      },
+      {
+        "name": "The Everything Visible Rule",
+        "body": "At 1440x900, every part of the current style fits the customize panel without scrolling. Tighten section padding before introducing a scroll.",
+        "section": "layout"
+      },
+      {
+        "name": "The Paper Lifts, Film Lies Flat Rule",
+        "body": "Shadows belong to paper objects (prints, the selected row, the active segment, the ink button, the sheet). Film bands and their contents never take a shadow; the one exception is the strip edge in dark, which separates the strip from the dark ground and never lands on anything inside the strip.",
+        "section": "elevation"
+      },
+      {
+        "name": "The One Focal Moment Rule",
+        "body": "The roll is the only sequence; every other change is a single short gesture (a lift, a draw, a swap). Nothing animates on load except the grid entrance, and nothing loops.",
+        "section": "components"
+      }
+    ],
+    "dos": [
+      "Do keep chrome to paper, ink, film and graphite so the avatars carry all colour.",
+      "Do use red grease pencil (pencil-red) only for the current pick: loops on the selected item and crop marks on the export frame.",
+      "Do use yellow grease pencil (pencil-yellow) only for locks, always beside the ink pressed lock toggle.",
+      "Do keep marks `aria-hidden` and carry state in semantics (`aria-checked`, `aria-current`, `aria-pressed`).",
+      "Do set edge-print labels and frame numbers in Barlow Condensed 600, uppercase and tracked, with tabular numerals.",
+      "Do preview options on the visitor's own avatar, cropped to the part.",
+      "Do size tiles, frames, swatches and gaps on the 8px module.",
+      "Do border every control with the control edge (on paper) or band control edge (on film), holding 3:1 in both themes.",
+      "Do swap the pencils to their brightened dark values in dark, keeping one job each.",
+      "Do keep prints paper in dark; only the chrome and ground go to film."
+    ],
+    "donts": [
+      "Don't use red or yellow for errors, emphasis, links, hover or decoration.",
+      "Don't let a grease-pencil mark replace a standard control or be the only signal of state.",
+      "Don't add colour to the chrome (no accent tints, coloured buttons or gradients).",
+      "Don't put shadows on film bands or their contents (the dark strip edge is the one exception), and don't use hard offset shadows.",
+      "Don't border a control with the hairline; it does not reach 3:1.",
+      "Don't use generic part icons in place of avatar previews.",
+      "Don't set a condensed uppercase line above a headline as a decorative kicker."
+    ]
+  }
+}
