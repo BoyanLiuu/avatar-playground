@@ -301,7 +301,7 @@ A neutral photo-lab palette of paper, ink, film and graphite, with two grease-pe
 - **Film Black** (film): the top band and the film-strip history (same value as ink).
 - **Film Raised** (film-2): controls sitting on the film band.
 - **Sprocket** (sprocket; sprocket-dark in dark): sprocket holes on film strips and the pressed segment on the band. Dark lifts the sprocket fill to #3a3d42 so the holes stay visible on the darker film, and the pressed band segment uses film-on-dark.
-- **Band Control Edge** (band-control-edge, the same in both themes): the border of controls on film (theme, language and GitHub buttons) and the inset ring on the pressed band segment. It exists to clear 3:1 against film and film-raised: 3.9:1 and 3.4:1 in light, 4.25:1 and 3.78:1 in dark.
+- **Band Control Edge** (band-control-edge, the same in both themes): the border of controls on film (theme and GitHub buttons) and the inset ring on the pressed band segment. It exists to clear 3:1 against film and film-raised: 3.9:1 and 3.4:1 in light, 4.25:1 and 3.78:1 in dark.
 - **Band Text** (band-fg, the same in both themes): wordmark, band control text, the current frame number, and the focus ring on film.
 - **Edge Print** (edge; edge-dark in dark): frame numbers and unpressed text on film.
 
@@ -418,7 +418,7 @@ Bordered, quiet and standard; the ink button is the only filled one.
 - **Primary:** ink fill, paper text, Title type, a Lucide dice icon and a `Space` key cap. One per view (Randomize; "Roll new sheet" in Grid).
 - **Secondary:** print white (dark surface in dark), control-edge border, ink text (PNG with a chevron, Copy SVG, Keep frame).
 - **Mini / lock toggle:** 28px control-edge squares in each part header (roll and lock). The pressed lock is ink filled with a paper icon (in dark: light ink fill, dark icon).
-- **On film:** film-raised fill, band-control-edge border, band text (GitHub, language switch, theme). On the phone, GitHub and the theme button collapse to 36px icon squares.
+- **On film:** film-raised fill, band-control-edge border, band text (GitHub, theme). On the phone, GitHub and the theme button collapse to 36px icon squares.
 - **Hover:** bordered buttons (secondary, small, toolbar icon, mini) fill to the tray and their border darkens to control-edge-hover (#737875, 3.6:1 on the tray, so hover keeps the 3:1 edge; dark keeps control-edge, 3.8:1 on the dark tray); the ink button keeps its fill and gains a 3px ring of its own colour at 22% around its shadow; a pressed lock keeps its ink fill. Option tiles hover by darkening their border to the control edge; history and grid frames hover by brightening the shot (108%). Transitions are 120ms on background, border and shadow.
 - **Pressed:** secondary, small and toolbar buttons (and the ink button) translate down 1px while held.
 - **Focus:** 2px ink outline, 2px offset, on every control. On the film band and the film strip the ring uses band text instead, so it shows against film in both themes.

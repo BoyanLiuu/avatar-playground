@@ -39,7 +39,8 @@ Success [inferred]: a first-time visitor rolls within seconds without instructio
 ## Capabilities and Constraints
 
 - **v1 scope:** the six styles above; randomize within the style or across any style; customize panel with option tiles, colour swatches, lock and per-part roll; frame (circle / squircle / square) and background; undo / redo / flip / reset; history (last 12); export PNG / SVG / Copy SVG; share link; Grid view.
-- **Later (not v1):** light theme, 中文 UI, more styles (Emoji, Kawaii Animals, Identicon, Initials), React-component export, npm engine package.
+- **Language:** English only; no language switch (owner decision, 2026-11-09).
+- **Later (not v1):** more styles (Emoji, Kawaii Animals, Identicon, Initials), React-component export, npm engine package.
 - **Technical:** Next.js 16 + React 19 + shadcn/ui (Base UI), client-only and statically exportable; the avatar engine renders deterministic 200×200 SVG strings shown through `<img>` data URLs; configs from URLs are validated (zod enums) before rendering.
 - **Terminology:** style, part, option, swatch, lock, roll / Randomize, Shuffle unlocked, seed, history, frame.
 - **Undecided:** product name beyond the working title "Avatar Playground" (repository `avatar-playground`); whether it later mounts as a route inside `boyanliu.me`.

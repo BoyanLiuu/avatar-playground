@@ -2,17 +2,19 @@
   "name": "avatar-playground",
   "version": "0.1.0",
   "private": true,
+  "type": "module",
   "scripts": {
-    "dev": "next dev -H 127.0.0.1 -p 3001",
-    "build": "next build",
+    "dev": "node scripts/make-fixtures.mjs && next dev -H 127.0.0.1 -p 3001",
+    "build": "node scripts/make-fixtures.mjs && next build",
     "start": "next start -H 127.0.0.1 -p 3001",
     "lint": "eslint",
     "format": "prettier --write .",
     "format:check": "prettier --check .",
-    "test": "vitest run",
+    "test": "node scripts/make-fixtures.mjs && vitest run",
     "test:watch": "vitest",
     "test:e2e": "playwright test",
-    "check": "eslint && vitest run && next build"
+    "check": "eslint && node scripts/make-fixtures.mjs && vitest run && next build",
+    "fixtures": "node scripts/make-fixtures.mjs"
   },
   "dependencies": {
     "@base-ui/react": "^1.9.0",
@@ -20,6 +22,7 @@
     "cn": "^0.5.2",
     "lucide-react": "^1.70.0",
     "next": "16.4.5",
+    "next-themes": "^0.4.6",
     "react": "19.3.0",
     "react-dom": "19.3.0",
     "shadcn": "^4.23.0",

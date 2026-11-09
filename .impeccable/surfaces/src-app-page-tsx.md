@@ -17,7 +17,7 @@ Decision: chosen unattended (owner delegated, reviews PNGs later). Alternates re
 
 Phone (390): the same controls as desktop, compacted: style chips, Single/Grid as icon toggles, the full toolbar, Randomize from, and every part (Frame included) as tabs in the customize sheet.
 
-Unresolved: final product name; 中文 strings. (Decided: light and dark, following the OS.)
+Unresolved: final product name. (Decided: light and dark, following the OS; English only, no language switch.)
 
 ## Direction contract
 

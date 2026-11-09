@@ -924,8 +924,7 @@
       }
     ],
     "openDecisions": [
-      "Product name: 'Avatar Playground' is a working name; the final name is unresolved.",
-      "中文 strings: the language switch exists but Chinese copy is not written."
+      "Product name: 'Avatar Playground' is a working name; the final name is unresolved."
     ],
     "theme": {
       "modes": [
@@ -985,7 +984,7 @@
       "kind": "nav",
       "refersTo": "segmented-band",
       "description": "Desktop sun/moon segmented control on the film band; pressed segment is the current theme. The phone uses one 36px icon button instead.",
-      "html": "<div class=\"ds-band\"><div class=\"ds-seg-dark\" role=\"group\" aria-label=\"Theme\"><button aria-pressed=\"true\" aria-label=\"Light theme\"><svg width=\"15\" height=\"15\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" aria-hidden=\"true\"><circle cx=\"12\" cy=\"12\" r=\"4\"/><path d=\"M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41\"/></svg></button><button aria-pressed=\"false\" aria-label=\"Dark theme\"><svg width=\"15\" height=\"15\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" aria-hidden=\"true\"><path d=\"M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z\"/></svg></button></div><div class=\"ds-seg-dark\" role=\"group\" aria-label=\"Language\"><button aria-pressed=\"true\">EN</button><button aria-pressed=\"false\">中文</button></div></div>",
+      "html": "<div class=\"ds-band\"><div class=\"ds-seg-dark\" role=\"group\" aria-label=\"Theme\"><button aria-pressed=\"true\" aria-label=\"Light theme\"><svg width=\"15\" height=\"15\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" aria-hidden=\"true\"><circle cx=\"12\" cy=\"12\" r=\"4\"/><path d=\"M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41\"/></svg></button><button aria-pressed=\"false\" aria-label=\"Dark theme\"><svg width=\"15\" height=\"15\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" aria-hidden=\"true\"><path d=\"M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z\"/></svg></button></div></div>",
       "css": ".ds-band{display:flex;gap:8px;padding:12px 16px;background:#141516}.ds-seg-dark{display:inline-flex;padding:3px;border-radius:10px;background:#202224;border:1px solid #70757a}.ds-seg-dark button{height:28px;display:inline-grid;place-items:center;padding:0 10px;border:0;border-radius:6px;background:none;color:#aeb3b0;font-family:Barlow,system-ui,sans-serif;font-weight:600;font-size:13px;cursor:pointer}.ds-seg-dark button[aria-pressed=true]{background:#33363a;color:#f3f4f2;box-shadow:inset 0 0 0 1px #70757a}.ds-seg-dark button:focus-visible{outline:2px solid #f3f4f2;outline-offset:2px}"
     },
     {
