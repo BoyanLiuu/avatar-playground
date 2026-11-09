@@ -1,5 +1,5 @@
 // 06 · Monsters: wobbly blob creatures with one to three eyes (ported from the prototype).
-import { z } from "zod";
+import { z } from "zod/mini";
 import { blobPath, f, shade } from "../geometry";
 import { draw32, makeRng } from "../rng";
 import { defineStyle } from "../types";
@@ -61,10 +61,7 @@ const schema = z.strictObject({
   pattern: z.enum(MONSTERS.pattern),
   cheeks: z.boolean(),
   /** Seeds the body outline, the spots and where the pupils look. */
-  wobble: z
-    .int()
-    .min(0)
-    .max(2 ** 32 - 1),
+  wobble: z.int().check(z.minimum(0), z.maximum(2 ** 32 - 1)),
 });
 export type MonstersConfig = z.infer<typeof schema>;
 

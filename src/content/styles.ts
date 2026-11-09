@@ -37,6 +37,8 @@ export type TileSection = SectionBase & {
   options: readonly string[];
   /** Human labels for the options (defaults to the capitalised ID). */
   labels?: readonly string[];
+  /** Describe the part by its label alone ("horns", not "horns top"). */
+  bare?: boolean;
   /** viewBox the option tiles crop to, in the 200-unit avatar space. */
   crop: string;
   /** 88x40 tiles in a 4-up grid instead of 56px squares in a 6-up grid. */
@@ -206,6 +208,7 @@ export const STYLES: readonly StyleDef[] = [
         title: "Mouth",
         key: "mouth",
         options: ROBOTS.mouth,
+        labels: ["Equalizer", "Line", "Smile", "Dots"],
         crop: "56 84 88 44",
         wide: true,
       },
@@ -318,6 +321,7 @@ export const STYLES: readonly StyleDef[] = [
         title: "Top",
         key: "top",
         options: MONSTERS.top,
+        bare: true,
         crop: "30 18 140 70",
         wide: true,
       },
@@ -389,6 +393,7 @@ export const STYLES: readonly StyleDef[] = [
         title: "Mouth",
         key: "mouth",
         options: GEOMETRIC.mouth,
+        labels: ["Semicircle", "Bar", "Circle", "Arc"],
         crop: "76 112 48 24",
         wide: true,
       },
@@ -397,6 +402,7 @@ export const STYLES: readonly StyleDef[] = [
         title: "Nose",
         key: "nose",
         options: GEOMETRIC.nose,
+        labels: ["Triangle", "Quarter circle", "Circle", "None"],
         crop: "76 96 48 24",
         wide: true,
       },

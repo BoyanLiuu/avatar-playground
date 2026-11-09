@@ -28,8 +28,9 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
-import type { StyleDef, StyleId } from "@/content/styles";
+import { type StyleDef, type StyleId, getStyle } from "@/content/styles";
 import { avatarSrc } from "@/lib/avatar";
+import { describeAvatar } from "@/lib/describe";
 import {
   avatarSvg,
   defaultPngSize,
@@ -325,9 +326,11 @@ const History = ({
     pad: compact ? 12 : 16,
     initial: compact ? 7 : 9,
   });
+  const style = getStyle(id);
   const frames: FilmFrame[] = present.shots.slice(-count).map((shot) => ({
     key: `${id}-${shot.no}`,
     no: shot.no,
+    description: describeAvatar(style, shot.config),
     src: avatarSrc(id, shot.config, {
       frame: present.frame,
       flip: present.flip,
@@ -383,7 +386,7 @@ const SingleView = ({ locked }: { locked: string[] }) => {
         <AvatarImg
           ref={img}
           src={src}
-          alt={`Current avatar: ${style.name}, frame ${shot.no}`}
+          alt={`Current avatar: ${style.name}, frame ${shot.no}. ${describeAvatar(style, shot.config)}`}
           className="hero-avatar"
         />
         <span className="contents max-sm:hidden">
@@ -443,7 +446,7 @@ const SingleView = ({ locked }: { locked: string[] }) => {
 };
 
 const GridView = ({ locked }: { locked: string[] }) => {
-  const { id, memory } = useCurrent();
+  const { id, style, memory } = useCurrent();
   const rollSheet = usePlayground((s) => s.rollSheet);
   const pickFrame = usePlayground((s) => s.pickFrame);
   const keepFrame = usePlayground((s) => s.keepFrame);
@@ -452,6 +455,7 @@ const GridView = ({ locked }: { locked: string[] }) => {
   const frames = sheetOf(id, memory).map((config, i) => ({
     key: `${memory.sheet}-${i}`,
     no: first + i,
+    description: describeAvatar(style, config),
     src: avatarSrc(id, config, {
       frame: memory.present.frame,
       flip: memory.present.flip,

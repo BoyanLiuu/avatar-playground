@@ -1,5 +1,5 @@
 // 02 · Pixel Art: a 20×20 sprite with an auto-generated outline (ported from the prototype).
-import { z } from "zod";
+import { z } from "zod/mini";
 import { shade } from "../geometry";
 import { defineStyle } from "../types";
 
@@ -53,8 +53,8 @@ const schema = z.strictObject({
   blush: z.boolean(),
   cap: z.enum(PIXEL.cap),
   /** Rows of the two background sparkles. */
-  sp1: z.int().min(2).max(4),
-  sp2: z.int().min(10).max(12),
+  sp1: z.int().check(z.minimum(2), z.maximum(4)),
+  sp2: z.int().check(z.minimum(10), z.maximum(12)),
 });
 export type PixelConfig = z.infer<typeof schema>;
 

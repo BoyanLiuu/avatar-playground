@@ -1,4 +1,4 @@
-import type { z } from "zod";
+import type { ZodMiniType } from "zod/mini";
 import type { StyleId } from "@/content/styles";
 import type { Rng } from "./rng";
 
@@ -19,7 +19,7 @@ export type RenderFlags = {
 export type StyleEngine<C extends Config = Config> = {
   id: StyleId;
   /** Validates configs from outside (URLs, pasted JSON) and from the UI. */
-  schema: z.ZodType<C>;
+  schema: ZodMiniType<C>;
   /** The style's first avatar: the one the mockups show. */
   defaults: C;
   /** Hidden fields a part's lock also keeps, beyond its key and colour row. */

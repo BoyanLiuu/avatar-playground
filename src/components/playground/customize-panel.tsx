@@ -25,6 +25,7 @@ import {
 } from "@/content/styles";
 import { withOption } from "@/engine/registry";
 import { avatarSrc } from "@/lib/avatar";
+import { colorNames } from "@/lib/describe";
 import { cn } from "@/lib/utils";
 import { useCurrent, usePlayground } from "@/store/playground";
 import { IconButton, WithTooltip, btnMini, btnSmall } from "./buttons";
@@ -52,6 +53,7 @@ const Swatches = ({
   const { shot } = useCurrent();
   const setPart = usePlayground((s) => s.setPart);
   const value = String(shot.config[field]);
+  const names = colorNames(colors);
   return (
     <RadioGroup
       aria-label={label}
@@ -63,7 +65,7 @@ const Swatches = ({
         <Radio.Root
           key={color}
           value={color}
-          aria-label={color}
+          aria-label={names[k]}
           className="relative block size-6 rounded-full shadow-[inset_0_0_0_1px_var(--swatch-ring)]"
           style={{ background: color }}
         >

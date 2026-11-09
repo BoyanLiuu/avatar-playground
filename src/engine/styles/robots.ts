@@ -1,5 +1,5 @@
 // 03 · Robots: boxy bots with glowing screen faces (ported from the prototype).
-import { z } from "zod";
+import { z } from "zod/mini";
 import { f, heartD, shade } from "../geometry";
 import { draw32, makeRng } from "../rng";
 import { defineStyle } from "../types";
@@ -49,10 +49,7 @@ const schema = z.strictObject({
   mouth: z.enum(ROBOTS.mouth),
   ant: z.enum(ROBOTS.ant),
   /** Seeds the equalizer mouth's bar heights. */
-  wobble: z
-    .int()
-    .min(0)
-    .max(2 ** 32 - 1),
+  wobble: z.int().check(z.minimum(0), z.maximum(2 ** 32 - 1)),
 });
 export type RobotsConfig = z.infer<typeof schema>;
 

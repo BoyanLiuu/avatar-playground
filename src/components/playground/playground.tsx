@@ -14,6 +14,7 @@ import {
   CustomizeSections,
   subtitleOf,
 } from "./customize-panel";
+import { Announcer } from "./announcer";
 import { PlaygroundLoading } from "./loading";
 import { Stage } from "./stage";
 import { StyleChips, StyleRail } from "./style-list";
@@ -96,6 +97,7 @@ export const Playground = () => {
               />
               <CustomizeColumn />
               <CustomizePhone tab={phoneTab} onTab={setTab} />
+              <Announcer />
             </>
           ) : (
             <PlaygroundLoading />

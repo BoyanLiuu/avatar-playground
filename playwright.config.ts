@@ -25,8 +25,9 @@ export default defineConfig({
     },
   ],
   webServer: {
-    // Serves the existing production build on loopback only. Run the build first.
-    command: `node_modules/.bin/next start -H 127.0.0.1 -p ${PORT}`,
+    // The static export (out/, from `pnpm build`) from a plain static file server, on loopback
+    // only: exactly what any static host would serve.
+    command: `python3 -m http.server ${PORT} --bind 127.0.0.1 --directory out`,
     url: baseURL,
     reuseExistingServer: !process.env.CI,
     timeout: 60_000,

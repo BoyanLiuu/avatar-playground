@@ -1,7 +1,7 @@
 // Locks survive a reload (localStorage). They are read at boot (./boot.ts), before the playground
 // first draws. Saved data is untrusted: anything that is not a list of a style's own part keys is
 // ignored.
-import { z } from "zod";
+import { z } from "zod/mini";
 import { STYLES, type StyleId } from "@/content/styles";
 import { usePlayground } from "./playground";
 
@@ -11,7 +11,7 @@ const Saved = z.object({
   v: z.literal(1),
   locks: z.partialRecord(
     z.enum(STYLES.map((s) => s.id) as [StyleId, ...StyleId[]]),
-    z.array(z.string().max(32)).max(16),
+    z.array(z.string().check(z.maxLength(32))).check(z.maxLength(16)),
   ),
 });
 

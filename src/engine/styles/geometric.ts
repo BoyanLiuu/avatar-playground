@@ -1,6 +1,6 @@
 // 08 · Geometric: faces from circles, arcs and triangles in a Bauhaus palette (ported from the
 // prototype).
-import { z } from "zod";
+import { z } from "zod/mini";
 import { circleD, shade } from "../geometry";
 import { defineStyle } from "../types";
 

@@ -85,9 +85,9 @@ test("a shared link draws only the shared avatar: no default first, then a swap"
   browser,
   request,
 }) => {
-  // The server page holds no avatars, only the loading print.
+  // The server page holds one avatar, the first one, in the loading print (hidden on a link).
   const html = await (await request.get("/")).text();
-  expect(html).not.toContain("data:image/svg+xml");
+  expect(html.match(/data:image\/svg\+xml/g)).toHaveLength(1);
   expect(html).toContain("Developing");
 
   const { page, context } = await open(browser);
@@ -106,7 +106,8 @@ test("a shared link draws only the shared avatar: no default first, then a swap"
       for (const img of document.querySelectorAll<HTMLImageElement>(
         'img[alt^="Current avatar"]',
       ))
-        if (seen.at(-1) !== img.src) seen.push(img.src);
+        if (img.checkVisibility() && seen.at(-1) !== img.src)
+          seen.push(img.src);
     }).observe(document, {
       subtree: true,
       childList: true,

@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Barlow, Barlow_Condensed } from "next/font/google";
 import { ThemeProvider } from "@/components/theme-provider";
 import { Toaster } from "@/components/ui/sonner";
+import { LINK_SCRIPT } from "@/lib/link-script";
 import "./globals.css";
 
 // One superfamily (DESIGN.md › Typography): Barlow for interface text, Barlow Condensed for edge print.
@@ -18,10 +19,29 @@ const barlowCondensed = Barlow_Condensed({
   display: "swap",
 });
 
+const OG_ALT =
+  "Avatar Playground: six avatar styles on a strip of film, Flat Cartoon, Pixel Art, Robots, Line Doodle, Monsters and Geometric";
+
+// Absolute URLs for the share card need the deployed address: set SITE_URL when building for a
+// host (see README).
 export const metadata: Metadata = {
+  metadataBase: new URL(process.env.SITE_URL ?? "http://127.0.0.1:3001"),
   title: "Avatar Playground",
   description:
-    "Generate avatars in six styles: pick a style, randomize, tweak each part.",
+    "Generate avatars in six styles: pick a style, randomize, tweak each part, lock what you like, then export or share.",
+  icons: {
+    icon: [{ url: "/icon.svg", type: "image/svg+xml" }],
+    apple: [{ url: "/apple-icon.png", sizes: "180x180" }],
+  },
+  openGraph: {
+    title: "Avatar Playground",
+    description:
+      "Six avatar styles. Roll, tweak, lock, then export PNG or SVG, or share a link.",
+    images: [
+      { url: "/opengraph-image.png", width: 1200, height: 630, alt: OG_ALT },
+    ],
+  },
+  twitter: { card: "summary_large_image", images: ["/opengraph-image.png"] },
 };
 
 export default function RootLayout({ children }: LayoutProps<"/">) {
@@ -31,6 +51,10 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
       className={`${barlow.variable} ${barlowCondensed.variable}`}
       suppressHydrationWarning
     >
+      <head>
+        {/* A fixed string, no user input. */}
+        <script dangerouslySetInnerHTML={{ __html: LINK_SCRIPT }} />
+      </head>
       <body>
         {/* Follows the OS until the visitor picks a theme (stored as "avatar-theme"). */}
         <ThemeProvider

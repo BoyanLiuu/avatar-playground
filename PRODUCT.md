@@ -38,7 +38,7 @@ Success [inferred]: a first-time visitor rolls within seconds without instructio
 
 ## Capabilities and Constraints
 
-- **v1 scope:** the six styles above; randomize within the style or across any style; customize panel with option tiles, colour swatches, lock and per-part roll; frame (circle / squircle / square) and background; undo / redo / flip / reset; history (last 12); export PNG / SVG / Copy SVG; share link; Grid view.
+- **v1 scope:** the six styles above; randomize within the style or across any style; customize panel with option tiles, colour swatches, lock and per-part roll; frame (circle / squircle / square) and background; undo / redo (50 steps) / flip / reset; history (a film strip of the last 50 frames); export PNG / SVG / Copy SVG; share link; Grid view.
 - **Language:** English only; no language switch (owner decision, 2026-11-09).
 - **Later (not v1):** more styles (Emoji, Kawaii Animals, Identicon, Initials), React-component export, npm engine package.
 - **Technical:** Next.js 16 + React 19 + shadcn/ui (Base UI), client-only and statically exportable; the avatar engine renders deterministic 200×200 SVG strings shown through `<img>` data URLs; configs from URLs are validated (zod enums) before rendering.

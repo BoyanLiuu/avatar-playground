@@ -1,13 +1,25 @@
 "use client";
 
-import { type RefObject, useLayoutEffect, useRef, useState } from "react";
+import {
+  type RefObject,
+  useId,
+  useLayoutEffect,
+  useRef,
+  useState,
+} from "react";
 import { AvatarImg } from "@/components/avatar-img";
 import { PencilLoop } from "@/components/pencil/pencil";
 import { advance, drawOn } from "@/lib/motion";
 import type { Frame } from "@/content/styles";
 import { cn } from "@/lib/utils";
 
-export type FilmFrame = { key: string; no: number; src: string };
+export type FilmFrame = {
+  key: string;
+  no: number;
+  src: string;
+  /** What the frame shows, for screen readers. */
+  description?: string;
+};
 
 /** Corner rounding of an avatar's frame shape, for unexposed frames. */
 const ROUND: Record<Frame, string> = {
@@ -84,6 +96,7 @@ export const FilmStrip = ({
   shape?: Frame;
 }) => {
   const ref = useRef<HTMLDivElement>(null);
+  const uid = useId();
   const newest = frames.at(-1)?.key;
   const last = useRef({ roll, newest });
   useLayoutEffect(() => {
@@ -144,6 +157,7 @@ export const FilmStrip = ({
             disabled={!onFrame}
             onClick={onFrame && (() => onFrame(i))}
             aria-label={`Frame ${frame.no}`}
+            aria-describedby={frame.description ? `${uid}-${i}` : undefined}
             aria-current={!sheet && isCircled ? "true" : undefined}
             aria-pressed={sheet ? isCircled : undefined}
             className={cn(
@@ -180,6 +194,11 @@ export const FilmStrip = ({
             >
               {frame.no}
             </span>
+            {frame.description && (
+              <span id={`${uid}-${i}`} className="sr-only">
+                {frame.description}
+              </span>
+            )}
           </button>
         );
       })}

@@ -1,5 +1,5 @@
 // 01 · Flat Cartoon: half-body flat illustration, no outlines (ported from the prototype).
-import { z } from "zod";
+import { z } from "zod/mini";
 import { shade } from "../geometry";
 import { defineStyle } from "../types";
 import { BEARD, BODY, HAIR } from "./human";

@@ -1,6 +1,6 @@
 // 05 · Line Doodle: hand-drawn monoline, solid black hair, one accent colour (ported from the
 // prototype).
-import { z } from "zod";
+import { z } from "zod/mini";
 import { blobPath, f, shade } from "../geometry";
 import { draw32, makeRng } from "../rng";
 import { defineStyle } from "../types";
@@ -49,10 +49,7 @@ const schema = z.strictObject({
   glasses: z.boolean(),
   blush: z.boolean(),
   /** Seeds the hand-drawn head outline and where the accent blob sits. */
-  wobble: z
-    .int()
-    .min(0)
-    .max(2 ** 32 - 1),
+  wobble: z.int().check(z.minimum(0), z.maximum(2 ** 32 - 1)),
 });
 export type DoodleConfig = z.infer<typeof schema>;
 

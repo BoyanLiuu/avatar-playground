@@ -5,12 +5,9 @@ import { type Browser, type Page, expect, test } from "@playwright/test";
 // canvas reads are slow in Firefox under parallel load, so these tests get more time.
 test.describe.configure({ timeout: 90_000 });
 
-/** Wait until React has hydrated (shortcuts and clicks only work after it). */
+/** Wait until the playground has booted (shortcuts and clicks only work after it). */
 const hydrated = (page: Page) =>
-  page.waitForFunction(() => {
-    const el = document.querySelector('img[alt^="Current avatar"]');
-    return !!el && Object.keys(el).some((k) => k.startsWith("__reactProps"));
-  });
+  page.getByRole("button", { name: /^Randomize( Space)?$/ }).waitFor();
 
 const open = async (browser: Browser, path = "/") => {
   const context = await browser.newContext({
