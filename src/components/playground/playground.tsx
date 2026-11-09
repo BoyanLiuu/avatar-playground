@@ -6,8 +6,7 @@ import { CustomizeSheet } from "@/components/shell/customize-sheet";
 import { TopBand } from "@/components/shell/top-band";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { STYLES } from "@/content/styles";
-import { usePersistedLocks } from "@/store/locks";
-import { useShareLink } from "@/store/share";
+import { useBoot } from "@/store/boot";
 import { useCurrent, usePlayground } from "@/store/playground";
 import {
   CustomizeColumn,
@@ -15,6 +14,7 @@ import {
   CustomizeSections,
   subtitleOf,
 } from "./customize-panel";
+import { PlaygroundLoading } from "./loading";
 import { Stage } from "./stage";
 import { StyleChips, StyleRail } from "./style-list";
 
@@ -33,6 +33,7 @@ const useShortcuts = () =>
       const target = e.target instanceof Element ? e.target : null;
       if (target?.closest(TYPING)) return;
       const s = usePlayground.getState();
+      if (!s.ready) return;
       const key = e.key.toLowerCase();
       if ((e.metaKey || e.ctrlKey) && !e.altKey) {
         const redo = (key === "z" && e.shiftKey) || (key === "y" && e.ctrlKey);
@@ -57,13 +58,16 @@ const useShortcuts = () =>
     return () => document.removeEventListener("keydown", onKey);
   }, []);
 
-/** The playground screen: rail, stage and customize panel over one store. */
+/**
+ * The playground screen: rail, stage and customize panel over one store. It first draws once boot
+ * has applied the share link and saved locks; until then, the loading print.
+ */
 export const Playground = () => {
   const { style } = useCurrent();
+  const ready = usePlayground((s) => s.ready);
   const [tab, setTab] = useState<string>("");
   useShortcuts();
-  usePersistedLocks();
-  useShareLink();
+  useBoot();
   // The phone's part tab falls back to the style's first tile part.
   const phoneTab = style.sections.some((s) => s.key === tab)
     ? tab
@@ -75,21 +79,27 @@ export const Playground = () => {
       <div className="flex min-h-dvh flex-col xl:h-dvh xl:overflow-hidden">
         <TopBand />
         <main className="flex min-h-0 flex-1 flex-col sm:flex-row">
-          <StyleRail />
-          <StyleChips />
-          <Stage
-            customize={
-              <CustomizeSheet
-                side="right"
-                subtitle={subtitleOf(style)}
-                className="max-sm:hidden xl:hidden"
-              >
-                <CustomizeSections />
-              </CustomizeSheet>
-            }
-          />
-          <CustomizeColumn />
-          <CustomizePhone tab={phoneTab} onTab={setTab} />
+          {ready ? (
+            <>
+              <StyleRail />
+              <StyleChips />
+              <Stage
+                customize={
+                  <CustomizeSheet
+                    side="right"
+                    subtitle={subtitleOf(style)}
+                    className="max-sm:hidden xl:hidden"
+                  >
+                    <CustomizeSections />
+                  </CustomizeSheet>
+                }
+              />
+              <CustomizeColumn />
+              <CustomizePhone tab={phoneTab} onTab={setTab} />
+            </>
+          ) : (
+            <PlaygroundLoading />
+          )}
         </main>
       </div>
     </TooltipProvider>

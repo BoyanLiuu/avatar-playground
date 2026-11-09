@@ -1,11 +1,7 @@
-"use client";
-
-// Keeps the address bar on the current avatar's share link (./url.ts) and opens a link on load.
-// replaceState, not pushState, so Back does not step through rolls; debounced, because Safari
-// throws after 100 history updates in 30 seconds.
-import { useEffect } from "react";
+// Opens the share link at boot (./boot.ts) and keeps the address bar on the current avatar's link
+// (./url.ts). replaceState, not pushState, so Back does not step through rolls; debounced,
+// because Safari throws after 100 history updates in 30 seconds.
 import { toast } from "sonner";
-import { withoutMotion } from "@/lib/motion";
 import { currentShot, usePlayground } from "./playground";
 import { type SharedAvatar, decodeLink, linkSearch } from "./url";
 
@@ -37,41 +33,44 @@ export const writeLink = () => {
     );
 };
 
-export const useShareLink = () =>
-  useEffect(() => {
-    const link = decodeLink(location.search);
-    const store = usePlayground.getState();
-    if (link.kind === "ok") withoutMotion(() => store.openShared(link.avatar));
-    if (link.kind === "bad") {
-      withoutMotion(() => store.rollStyle(link.id));
-      toast("That link didn’t work, so here’s a fresh avatar.", {
-        duration: 4000,
-      });
-    }
-    // An opened link is rewritten in canonical form; a bad one is replaced.
-    if (link.kind !== "none") writeLink();
-
-    let last = linkSearch(currentAvatar());
-    let timer: ReturnType<typeof setTimeout> | undefined;
-    const flush = () => {
-      clearTimeout(timer);
-      timer = undefined;
-      writeLink();
-    };
-    const unsubscribe = usePlayground.subscribe(() => {
-      const now = linkSearch(currentAvatar());
-      if (now === last) return;
-      last = now;
-      clearTimeout(timer);
-      timer = setTimeout(flush, DEBOUNCE);
+/** Open the link in the URL, if any (once, at boot); a bad one falls back with a toast. */
+export const openLinkFromUrl = () => {
+  const link = decodeLink(location.search);
+  const store = usePlayground.getState();
+  if (link.kind === "ok") store.openShared(link.avatar);
+  if (link.kind === "bad") {
+    store.rollStyle(link.id);
+    toast("That link didn’t work, so here’s a fresh avatar.", {
+      duration: 4000,
     });
-    const onHide = () => {
-      if (timer !== undefined) flush();
-    };
-    window.addEventListener("pagehide", onHide);
-    return () => {
-      unsubscribe();
-      window.removeEventListener("pagehide", onHide);
-      clearTimeout(timer);
-    };
-  }, []);
+  }
+  // An opened link is rewritten in canonical form; a bad one is replaced.
+  if (link.kind !== "none") writeLink();
+};
+
+/** Keep the address bar on the current avatar; returns the unsubscribe. */
+export const syncLinkOnChange = () => {
+  let last = linkSearch(currentAvatar());
+  let timer: ReturnType<typeof setTimeout> | undefined;
+  const flush = () => {
+    clearTimeout(timer);
+    timer = undefined;
+    writeLink();
+  };
+  const unsubscribe = usePlayground.subscribe(() => {
+    const now = linkSearch(currentAvatar());
+    if (now === last) return;
+    last = now;
+    clearTimeout(timer);
+    timer = setTimeout(flush, DEBOUNCE);
+  });
+  const onHide = () => {
+    if (timer !== undefined) flush();
+  };
+  window.addEventListener("pagehide", onHide);
+  return () => {
+    unsubscribe();
+    window.removeEventListener("pagehide", onHide);
+    clearTimeout(timer);
+  };
+};

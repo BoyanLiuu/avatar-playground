@@ -1,4 +1,5 @@
 import { type Browser, type Page, expect, test } from "@playwright/test";
+import { ready } from "./ready";
 
 // M3.2: the URL describes the current avatar; links are validated before anything is drawn.
 
@@ -10,6 +11,7 @@ const open = async (browser: Browser, path = "/") => {
   const errors: string[] = [];
   page.on("pageerror", (e) => errors.push(e.message));
   await page.goto(path);
+  await ready(page);
   return { page, context, errors };
 };
 
@@ -43,6 +45,8 @@ test("the URL follows the avatar; a reload brings back the same avatar", async (
   const src = await hero(page).getAttribute("src");
 
   await page.reload();
+
+  await ready(page);
   await expect(panel(page)).toContainText("Robots · 6 parts");
   await expect(hero(page)).toHaveAttribute("src", src!);
   await expect(page.getByText(/Frame\s*\d+\s*·\s*shared/)).toBeVisible();
@@ -75,6 +79,49 @@ test("the copied link shows the identical avatar in a fresh browser", async ({
   await expect(hero(other.page)).toHaveAttribute("src", src!);
   await context.close();
   await other.context.close();
+});
+
+test("a shared link draws only the shared avatar: no default first, then a swap", async ({
+  browser,
+  request,
+}) => {
+  // The server page holds no avatars, only the loading print.
+  const html = await (await request.get("/")).text();
+  expect(html).not.toContain("data:image/svg+xml");
+  expect(html).toContain("Developing");
+
+  const { page, context } = await open(browser);
+  await page.keyboard.press("3");
+  await randomize(page).click();
+  await expect.poll(async () => (await linkOf(page)).get("s")).toBe("robots");
+  const url = await page.evaluate(() => location.href);
+  const shared = await hero(page).getAttribute("src");
+
+  // Fresh page: record every image the hero ever shows, from the first byte.
+  const fresh = await context.newPage();
+  await fresh.addInitScript(() => {
+    const seen: string[] = [];
+    (window as unknown as { __heroes: string[] }).__heroes = seen;
+    new MutationObserver(() => {
+      for (const img of document.querySelectorAll<HTMLImageElement>(
+        'img[alt^="Current avatar"]',
+      ))
+        if (seen.at(-1) !== img.src) seen.push(img.src);
+    }).observe(document, {
+      subtree: true,
+      childList: true,
+      attributes: true,
+      attributeFilter: ["src"],
+    });
+  });
+  await fresh.goto(url);
+  await ready(fresh);
+  await fresh.waitForTimeout(300);
+  const heroes = await fresh.evaluate(
+    () => (window as unknown as { __heroes: string[] }).__heroes,
+  );
+  expect(heroes).toEqual([shared]);
+  await context.close();
 });
 
 const b64 = (text: string) => Buffer.from(text).toString("base64url");

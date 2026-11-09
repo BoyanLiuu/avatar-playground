@@ -1,12 +1,8 @@
-"use client";
-
-// Locks survive a reload (localStorage). They are read after hydration, so the server render and
-// the first client render agree; restoring them draws no marks. Saved data is untrusted: anything
-// that is not a list of a style's own part keys is ignored.
-import { useEffect } from "react";
+// Locks survive a reload (localStorage). They are read at boot (./boot.ts), before the playground
+// first draws. Saved data is untrusted: anything that is not a list of a style's own part keys is
+// ignored.
 import { z } from "zod";
 import { STYLES, type StyleId } from "@/content/styles";
-import { withoutMotion } from "@/lib/motion";
 import { usePlayground } from "./playground";
 
 export const LOCKS_KEY = "avatar-locks";
@@ -38,25 +34,27 @@ const locksOf = () => {
   return Object.fromEntries(STYLES.map(({ id }) => [id, memory[id].locks]));
 };
 
-/** Restore saved locks once, then save them whenever they change. */
-export const usePersistedLocks = () =>
-  useEffect(() => {
+/** Apply the saved locks (once, at boot). */
+export const restoreSavedLocks = () => {
+  try {
+    const saved = parseLocks(localStorage.getItem(LOCKS_KEY));
+    if (Object.keys(saved).length) usePlayground.getState().restoreLocks(saved);
+  } catch {
+    // storage unavailable: locks last for this page only
+  }
+};
+
+/** Save the locks whenever they change; returns the unsubscribe. */
+export const saveLocksOnChange = () => {
+  let last = JSON.stringify(locksOf());
+  return usePlayground.subscribe(() => {
+    const now = JSON.stringify(locksOf());
+    if (now === last) return;
+    last = now;
     try {
-      const saved = parseLocks(localStorage.getItem(LOCKS_KEY));
-      if (Object.keys(saved).length)
-        withoutMotion(() => usePlayground.getState().restoreLocks(saved));
+      localStorage.setItem(LOCKS_KEY, serializeLocks(JSON.parse(now)));
     } catch {
-      // storage unavailable: locks last for this page only
+      // storage full or unavailable: keep going without saving
     }
-    let last = JSON.stringify(locksOf());
-    return usePlayground.subscribe(() => {
-      const now = JSON.stringify(locksOf());
-      if (now === last) return;
-      last = now;
-      try {
-        localStorage.setItem(LOCKS_KEY, serializeLocks(JSON.parse(now)));
-      } catch {
-        // storage full or unavailable: keep going without saving
-      }
-    });
-  }, []);
+  });
+};

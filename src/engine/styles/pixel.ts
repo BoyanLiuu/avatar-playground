@@ -122,7 +122,7 @@ export const pixel = defineStyle<PixelConfig>({
     };
   },
 
-  render(c) {
+  render(c, _uid, { transparent } = {}) {
     const g: (string | null)[] = new Array(N * N).fill(null);
     const set = (x: number, y: number, col: string | null) => {
       if (x >= 0 && x < N && y >= 0 && y < N) g[y * N + x] = col;
@@ -273,8 +273,9 @@ export const pixel = defineStyle<PixelConfig>({
             `<rect x="${(cx + dx) * C}" y="${(cy + dy) * C}" width="${C}" height="${C}"/>`,
         )
         .join("");
-    let s = `<rect width="200" height="200" fill="${c.bg}"/>`;
-    s += `<g fill="#fff" opacity=".65" shape-rendering="crispEdges">${spark(2, c.sp1)}${spark(18, c.sp2)}</g>`;
+    let s = transparent
+      ? ""
+      : `<rect width="200" height="200" fill="${c.bg}"/><g fill="#fff" opacity=".65" shape-rendering="crispEdges">${spark(2, c.sp1)}${spark(18, c.sp2)}</g>`;
     s += '<g shape-rendering="crispEdges">';
     // One rect per horizontal run of the same colour.
     for (let y = 0; y < N; y++) {

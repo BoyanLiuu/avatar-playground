@@ -102,7 +102,7 @@ export const doodle = defineStyle<DoodleConfig>({
     };
   },
 
-  render(c, uid) {
+  render(c, uid, { transparent } = {}) {
     const { ax, ay, headD } = doodleTexture(c.wobble);
     const beard = ["short", "side", "spiky"].includes(c.hair) && c.beard;
     const mouth = beard ? "smile" : c.mouth;
@@ -110,8 +110,9 @@ export const doodle = defineStyle<DoodleConfig>({
     const inked = (ds: readonly string[]) =>
       ds.map((d) => `<path d="${d}" fill="${INK}" ${S()}/>`).join("");
     const o = [
-      `<rect width="200" height="200" fill="#F7F4EE"/>`,
-      `<circle cx="${ax}" cy="${ay}" r="62" fill="${c.accent}"/>`,
+      transparent
+        ? ""
+        : `<rect width="200" height="200" fill="#F7F4EE"/><circle cx="${ax}" cy="${ay}" r="62" fill="${c.accent}"/>`,
       inked(H.back),
       `<path d="M90 124 L89 158 M110 124 L111 158" fill="none" ${S()}/>`,
       `<defs><clipPath id="${uid}-body"><path d="${BODY}"/></clipPath></defs><path d="${BODY}" fill="#fff"/>`,

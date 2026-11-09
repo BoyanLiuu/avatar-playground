@@ -30,6 +30,14 @@ import {
 import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
 import type { StyleDef, StyleId } from "@/content/styles";
 import { avatarSrc } from "@/lib/avatar";
+import {
+  avatarSvg,
+  defaultPngSize,
+  fileName,
+  pngSizes,
+  saveFile,
+  svgToPng,
+} from "@/lib/export";
 import { develop, drawOn, redraw, swap } from "@/lib/motion";
 import { cn } from "@/lib/utils";
 import {
@@ -49,39 +57,88 @@ import {
   segItem,
   segTrack,
 } from "./buttons";
-import { type FilmFrame, FilmStrip } from "./film-strip";
+import { type FilmFrame, FilmStrip, useFit } from "./film-strip";
 import { KeyCap } from "./key-cap";
 import { ScopeToggle } from "./style-list";
 
-// Export (M4) is shown but not wired yet.
+/** Export the current avatar (M4): PNG at a size, SVG file, or SVG to the clipboard. */
+const useExport = () => {
+  const { id, present, shot } = useCurrent();
+  const avatar = {
+    id,
+    config: shot.config,
+    frame: present.frame,
+    flip: present.flip,
+  };
+  return {
+    png: async (size: number, transparent = false) => {
+      try {
+        const svg = avatarSvg(avatar, { size, transparent });
+        saveFile(await svgToPng(svg, size), fileName(id, shot, "png"));
+      } catch {
+        toast("Couldn’t make the PNG. Try the SVG instead.");
+      }
+    },
+    svg: (transparent = false) =>
+      saveFile(
+        new Blob(
+          [avatarSvg(avatar, { size: defaultPngSize(id), transparent })],
+          {
+            type: "image/svg+xml",
+          },
+        ),
+        fileName(id, shot, "svg"),
+      ),
+    copy: async () => {
+      try {
+        await navigator.clipboard.writeText(
+          avatarSvg(avatar, { size: defaultPngSize(id) }),
+        );
+        toast("SVG copied");
+      } catch {
+        toast("Couldn’t copy the SVG.");
+      }
+    },
+  };
+};
 
-const PNG_SIZES = (style: StyleDef) =>
-  style.id === "pixel" ? [200, 400, 800, 1000] : [256, 512, 1024];
-
-const PngMenu = ({ style }: { style: StyleDef }) => (
-  <DropdownMenu>
-    <DropdownMenuTrigger
-      disabled
-      render={<button type="button" className={btnSecondary} />}
-    >
-      <DownloadIcon className="size-[18px]" />
-      PNG
-      <ChevronDownIcon className="size-4" />
-    </DropdownMenuTrigger>
-    <DropdownMenuContent className="min-w-48">
-      {PNG_SIZES(style).map((px) => (
-        <DropdownMenuItem key={px}>
-          PNG · {px} × {px}
+/** PNG sizes, the transparent option (it applies to this menu's downloads) and SVG. */
+const PngMenu = ({ style }: { style: StyleDef }) => {
+  const exporter = useExport();
+  const transparent = usePlayground((s) => s.transparent);
+  const setTransparent = usePlayground((s) => s.setTransparent);
+  return (
+    <DropdownMenu>
+      <DropdownMenuTrigger
+        render={<button type="button" className={btnSecondary} />}
+      >
+        <DownloadIcon className="size-[18px]" />
+        PNG
+        <ChevronDownIcon className="size-4" />
+      </DropdownMenuTrigger>
+      <DropdownMenuContent className="min-w-48">
+        {pngSizes(style.id).map((px) => (
+          <DropdownMenuItem
+            key={px}
+            onClick={() => exporter.png(px, transparent)}
+          >
+            PNG · {px} × {px}
+          </DropdownMenuItem>
+        ))}
+        <DropdownMenuCheckboxItem
+          checked={transparent}
+          onCheckedChange={setTransparent}
+        >
+          Transparent background
+        </DropdownMenuCheckboxItem>
+        <DropdownMenuSeparator />
+        <DropdownMenuItem onClick={() => exporter.svg(transparent)}>
+          SVG
         </DropdownMenuItem>
-      ))}
-      <DropdownMenuCheckboxItem>
-        Transparent background
-      </DropdownMenuCheckboxItem>
-      <DropdownMenuSeparator />
-      <DropdownMenuItem>SVG</DropdownMenuItem>
-    </DropdownMenuContent>
-  </DropdownMenu>
-);
+      </DropdownMenuContent>
+    </DropdownMenu>
+  );
+};
 
 const ViewToggle = () => {
   const view = usePlayground((s) => s.view);
@@ -159,7 +216,8 @@ const LockedLine = ({
 };
 
 const Toolbar = ({ withExport = false }: { withExport?: boolean }) => {
-  const { memory, present } = useCurrent();
+  const { id, memory, present } = useCurrent();
+  const exporter = useExport();
   const undo = usePlayground((s) => s.undo);
   const redo = usePlayground((s) => s.redo);
   const flip = usePlayground((s) => s.flip);
@@ -199,15 +257,33 @@ const Toolbar = ({ withExport = false }: { withExport?: boolean }) => {
       </IconButton>
       {withExport && (
         <>
-          <IconButton label="Download PNG" className={btnIcon} disabled>
+          <IconButton
+            label="Download PNG"
+            className={btnIcon}
+            onClick={() => exporter.png(defaultPngSize(id))}
+          >
             <DownloadIcon className="size-[18px]" />
           </IconButton>
-          <IconButton label="Copy SVG" className={btnIcon} disabled>
+          <IconButton
+            label="Copy SVG"
+            className={btnIcon}
+            onClick={exporter.copy}
+          >
             <CopyIcon className="size-[18px]" />
           </IconButton>
         </>
       )}
     </>
+  );
+};
+
+const CopySvgButton = () => {
+  const { copy } = useExport();
+  return (
+    <button type="button" className={btnSecondary} onClick={copy}>
+      <CopyIcon className="size-[18px]" />
+      Copy SVG
+    </button>
   );
 };
 
@@ -224,23 +300,31 @@ const RandomizeButton = ({ className }: { className?: string }) => {
   );
 };
 
-/** The history strip: the last `count` frames in the current frame shape, the current circled. */
+/**
+ * The history strip: as many of the newest frames as fit its width, in the current frame shape,
+ * the current one circled. While the film is shorter than the strip, unexposed frames fill it.
+ */
 const History = ({
   id,
   present,
-  count,
   size,
-  compact,
+  compact = false,
   roll,
 }: {
   id: StyleId;
   present: Present;
-  count: number;
   size: number;
   compact?: boolean;
   roll: number;
 }) => {
   const restore = usePlayground((s) => s.restore);
+  const box = useRef<HTMLDivElement>(null);
+  const count = useFit(box, {
+    size,
+    gap: compact ? 8 : 12,
+    pad: compact ? 12 : 16,
+    initial: compact ? 7 : 9,
+  });
   const frames: FilmFrame[] = present.shots.slice(-count).map((shot) => ({
     key: `${id}-${shot.no}`,
     no: shot.no,
@@ -251,15 +335,19 @@ const History = ({
   }));
   const circled = frames.findIndex((f) => f.no === present.current);
   return (
-    <FilmStrip
-      frames={frames}
-      circled={circled < 0 ? null : circled}
-      size={size}
-      compact={compact}
-      label="Earlier rolls"
-      onFrame={(i) => restore(frames[i].no)}
-      roll={roll}
-    />
+    <div ref={box}>
+      <FilmStrip
+        frames={frames}
+        circled={circled < 0 ? null : circled}
+        size={size}
+        compact={compact}
+        label="Earlier rolls"
+        onFrame={(i) => restore(frames[i].no)}
+        roll={roll}
+        blank={count - frames.length}
+        shape={present.frame}
+      />
+    </div>
   );
 };
 
@@ -317,10 +405,7 @@ const SingleView = ({ locked }: { locked: string[] }) => {
         />
         <RandomizeButton />
         <PngMenu style={style} />
-        <button type="button" className={btnSecondary} disabled>
-          <CopyIcon className="size-[18px]" />
-          Copy SVG
-        </button>
+        <CopySvgButton />
       </div>
 
       {/* Phone: Randomize spans the width over six equal tools; the scope moves here from the rail. */}
@@ -347,23 +432,10 @@ const SingleView = ({ locked }: { locked: string[] }) => {
           <span className="sm:hidden">Tap to restore</span>
         </div>
         <div className="max-sm:hidden">
-          <History
-            id={id}
-            present={present}
-            count={9}
-            size={64}
-            roll={rollId}
-          />
+          <History id={id} present={present} size={64} roll={rollId} />
         </div>
         <div className="sm:hidden">
-          <History
-            id={id}
-            present={present}
-            count={7}
-            size={44}
-            compact
-            roll={rollId}
-          />
+          <History id={id} present={present} size={44} compact roll={rollId} />
         </div>
       </section>
     </>

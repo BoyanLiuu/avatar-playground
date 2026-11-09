@@ -134,7 +134,7 @@ describe("playground store", () => {
     const states = [mem().present];
     store().roll();
     states.push(mem().present);
-    store().setPart("mouth", "smirk");
+    store().setPart("mouth", now().config.mouth === "smirk" ? "o" : "smirk");
     states.push(mem().present);
     store().setFrame("circle");
     states.push(mem().present);

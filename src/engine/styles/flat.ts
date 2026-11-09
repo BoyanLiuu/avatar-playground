@@ -122,7 +122,7 @@ export const flat = defineStyle<FlatConfig>({
     return { ...c, hat: keep.hat ?? hats[Math.floor(hatRoll * hats.length)] };
   },
 
-  render(c) {
+  render(c, _uid, { transparent } = {}) {
     const beard =
       ["short", "spiky", "side", "beanie"].includes(c.hair) && c.beard;
     const H = HAIR[c.hair];
@@ -130,8 +130,9 @@ export const flat = defineStyle<FlatConfig>({
       ds.map((d) => `<path d="${d}" fill="${fill}"/>`).join("");
     const neck = shade(c.skin, -0.1);
     const o = [
-      `<rect width="200" height="200" fill="${c.bg}"/>`,
-      `<circle cx="100" cy="108" r="80" fill="#fff" opacity=".45"/>`,
+      transparent
+        ? ""
+        : `<rect width="200" height="200" fill="${c.bg}"/><circle cx="100" cy="108" r="80" fill="#fff" opacity=".45"/>`,
       paths(H.back, c.hairC),
       `<rect x="87" y="112" width="26" height="48" rx="12" fill="${neck}"/>`,
       `<path d="${BODY}" fill="${c.shirt}"/>`,

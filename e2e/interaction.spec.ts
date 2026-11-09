@@ -1,4 +1,5 @@
 import { type Browser, type Page, expect, test } from "@playwright/test";
+import { ready } from "./ready";
 
 // M2: the interactive logic against the plan's checks.
 
@@ -11,6 +12,7 @@ const open = async (
     ...options,
   });
   await page.goto("/");
+  await ready(page);
   return page;
 };
 

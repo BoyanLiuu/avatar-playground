@@ -444,11 +444,11 @@ Bordered, quiet and standard; the ink button is the only filled one.
 
 ### Film strip (signature)
 
-A film-black band, 6px radius, with sprocket rows top and bottom. Frames are avatar shots with edge-print numbers beneath, newest at the right; the current frame is circled in red and its number turns paper. In Grid view the strip becomes the contact sheet itself: three strips of four large frames, numbered on from the current frame. Clicking a frame circles it; Keep frame stays disabled until one is circled, then adopts it under its number and returns to Single view.
+A film-black band, 6px radius, with sprocket rows top and bottom. Frames are avatar shots with edge-print numbers beneath, newest at the right; the current frame is circled in red and its number turns paper. The history strip holds as many 64px frames as its width fits (44px on phones), centred, so no frame is ever cut at the edge; while the film is shorter than the strip, unexposed frames (film-2 blanks in the style's frame shape, no number) fill the slots to the left of frame 1. In Grid view the strip becomes the contact sheet itself: three strips of four large frames, numbered on from the current frame. Clicking a frame circles it; Keep frame stays disabled until one is circled, then adopts it under its number and returns to Single view.
 
 ### Hero print and crop marks
 
-The current avatar on a white print with the print shadow; four red grease-pencil crop corners sit outside it, marking the export frame.
+The current avatar on a white print with the print shadow; four red grease-pencil crop corners sit outside it, marking the export frame. **Loading:** until the page has applied its share link and saved locks, the stage shows the same print empty, "developing" (a graphite spinner and an edge-print DEVELOPING label that fade in after 150ms, so a fast load shows only the blank print), over an empty film strip, with the rail and panel columns in place. Everything holds its position, so the stable avatar replaces the loading print with no jump, and the default avatar is never shown first. Export takes exactly what the print shows: PNG ▾ lists 256, 512 and 1024 (Pixel Art 200, 400, 800 and 1000, so its pixels stay whole), a Transparent background option and SVG; Copy SVG and the phone's Download PNG (512, Pixel Art 400) skip the menu. Transparent drops the background fill and background-only decoration (Flat's halo, Robots' grid, Pixel's sparkles, Monsters' ground shadow, Doodle's paper and accent blob, Geometric's corner shape) and keeps the frame shape with clear corners. Files are named `avatar-<style>-<seed>`, or `avatar-<style>-frame<n>` for a shared frame.
 
 ### Lock annotation
 
@@ -458,7 +458,7 @@ A locked part shows the ink pressed lock toggle in its header and a yellow greas
 
 Motion tells the contact-sheet story and nothing else. Two easings and four durations (see the sidecar): ease-out `cubic-bezier(.16,1,.3,1)` for movement and drawing, ease-develop `cubic-bezier(.33,0,.2,1)` for the print developing; fast 120ms, base 240ms, slow 360ms, develop 560ms. Marks draw on along their own stroke (path length 1, dash offset 1 to 0).
 
-- **Roll (the focal moment):** the strip shifts one frame to the left by FLIP over 360ms on ease-out; the new frame lands from the right (28px, fading in) over 360ms with its red loop drawing on in 240ms; the hero print develops from overexposure (bright, low contrast, desaturated, settling to the true image) over 560ms on ease-develop; the four crop marks redraw in 240ms. The strip keeps the last nine frames.
+- **Roll (the focal moment):** the strip shifts one frame to the left by FLIP over 360ms on ease-out; the new frame lands from the right (28px, fading in) over 360ms with its red loop drawing on in 240ms; the hero print develops from overexposure (bright, low contrast, desaturated, settling to the true image) over 560ms on ease-develop; the four crop marks redraw in 240ms. The strip shows the newest frames that fit; the film keeps 50.
 - **Pick:** the old loop lifts (a 120ms fade, then removed), the new loop draws on in 240ms, and the hero print swaps with a 120ms fade-up.
 - **Lock:** the yellow underline draws on left to right in 240ms under the section title and under the new chip in the "Randomize keeps" line. Unlocking removes it.
 - **Grid:** the three strips of the contact sheet enter staggered at 0, 40 and 80ms, each rising 10px and fading in over 300ms.
@@ -468,7 +468,7 @@ Motion tells the contact-sheet story and nothing else. Two easings and four dura
 - **Reduced motion:** no slide and no draw. The strip does not shift; loop, underline, develop, frame landing and grid entrance all become 120ms fades; the crop marks do not redraw; the toast fades without moving.
 - **Static renders:** the PNGs show the settled state; motion is live only in `../docs/avatar/motion-demo.html`.
 
-**The One Focal Moment Rule.** The roll is the only sequence; every other change is a single short gesture (a lift, a draw, a swap). Nothing animates on load except the grid entrance, and nothing loops.
+**The One Focal Moment Rule.** The roll is the only sequence; every other change is a single short gesture (a lift, a draw, a swap). Nothing animates on load except the grid entrance, and nothing loops (the loading spinner is the one exception, and it shows only when loading takes more than a beat).
 
 ## Do's and Don'ts
 

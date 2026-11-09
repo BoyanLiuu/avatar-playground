@@ -307,3 +307,13 @@
     transition: opacity var(--dur-fast) linear !important;
   }
 }
+
+/* The loading print's spinner appears only if loading takes more than a beat. */
+.loading-in {
+  animation: fade-in-full 200ms 150ms both;
+}
+@keyframes fade-in-full {
+  from {
+    opacity: 0;
+  }
+}

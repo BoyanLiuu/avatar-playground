@@ -1,4 +1,5 @@
 import { type Browser, type Page, expect, test } from "@playwright/test";
+import { ready } from "./ready";
 
 // M3.1: history (undo, redo, restore) and locks that survive a reload.
 
@@ -7,6 +8,7 @@ const open = async (browser: Browser) => {
     viewport: { width: 1440, height: 900 },
   });
   await page.goto("/");
+  await ready(page);
   return page;
 };
 
@@ -168,6 +170,8 @@ test("locks survive a reload, and restoring them draws nothing", async ({
   await page.keyboard.press("1");
 
   await page.reload();
+
+  await ready(page);
   await page.waitForTimeout(400);
   const lock = (name: string) => panel(page).getByRole("button", { name });
   await expect(lock("Lock Eyes")).toHaveAttribute("aria-pressed", "true");
@@ -193,6 +197,37 @@ test("locks survive a reload, and restoring them draws nothing", async ({
     localStorage.setItem("avatar-locks", '{"v":1,"locks":{"flat":"oops"}}'),
   );
   await page.reload();
+  await ready(page);
   await expect(lock("Lock Skin")).toHaveAttribute("aria-pressed", "true");
   await page.close();
+});
+
+test("the strip fills its width: more frames on wide screens, none cut off, blanks while short", async ({
+  browser,
+}) => {
+  const fit = async (width: number, height: number, rolls: number) => {
+    const page = await browser.newPage({ viewport: { width, height } });
+    await page.goto("/");
+    await ready(page);
+    for (let n = 0; n < rolls; n++) await randomize(page).click();
+    await page.waitForTimeout(450);
+    const info = await strip(page).evaluate((el) => {
+      const box = el.getBoundingClientRect();
+      const frames = [...el.querySelectorAll("[data-frame]")];
+      return {
+        frames: frames.length,
+        blank: el.querySelectorAll("[data-blank]").length,
+        cut: frames.filter((f) => {
+          const r = f.getBoundingClientRect();
+          return r.left < box.left || r.right > box.right;
+        }).length,
+      };
+    });
+    await page.close();
+    return info;
+  };
+  // 1856 wide fits 14 frames: 9 on the film plus 5 blanks, then 14 frames after 6 rolls.
+  expect(await fit(1856, 1000, 0)).toEqual({ frames: 9, blank: 5, cut: 0 });
+  expect(await fit(1856, 1000, 6)).toEqual({ frames: 14, blank: 0, cut: 0 });
+  expect(await fit(1280, 800, 0)).toEqual({ frames: 6, blank: 0, cut: 0 });
 });

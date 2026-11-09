@@ -12,7 +12,7 @@ import { monsters } from "./styles/monsters";
 import { pixel } from "./styles/pixel";
 import { robots } from "./styles/robots";
 import { wrapSvg } from "./svg";
-import type { Config, StyleEngine } from "./types";
+import type { Config, RenderFlags, StyleEngine } from "./types";
 
 export const ENGINES: Record<StyleId, StyleEngine> = {
   flat,
@@ -63,12 +63,18 @@ export const rollSheet = (id: StyleId, seed: string, keep: Partial<Config>) => {
   return Array.from({ length: SHEET_SIZE }, () => ENGINES[id].random(r, keep));
 };
 
-export type RenderOptions = { frame: Frame; flip?: boolean; crop?: string };
+export type RenderOptions = {
+  frame: Frame;
+  flip?: boolean;
+  crop?: string;
+  size?: number;
+} & RenderFlags;
 
 /** A standalone SVG of the avatar. */
 export const renderAvatar = (
   id: StyleId,
   config: Config,
-  opts: RenderOptions,
+  { transparent, ...opts }: RenderOptions,
   uid = "av",
-) => wrapSvg(ENGINES[id].render(config, uid), { ...opts, uid });
+) =>
+  wrapSvg(ENGINES[id].render(config, uid, { transparent }), { ...opts, uid });

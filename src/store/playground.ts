@@ -43,18 +43,24 @@ export type StyleMemory = {
 };
 
 type State = {
+  /** False until boot (./boot.ts) has applied the share link and saved locks. */
+  ready: boolean;
   styleId: StyleId;
   view: View;
   scope: Scope;
   /** Bumped by every roll; the stage replays the roll motion when it changes. */
   rollId: number;
+  /** Export: leave out the background (the PNG menu's option). */
+  transparent: boolean;
   memory: Record<StyleId, StyleMemory>;
 };
 
 type Actions = {
+  setReady: () => void;
   selectStyle: (id: StyleId) => void;
   setView: (view: View) => void;
   setScope: (scope: Scope) => void;
+  setTransparent: (transparent: boolean) => void;
   /** Randomize: a new frame in this style, or in any style. */
   roll: () => void;
   /** Shuffle unlocked: a new frame, always in this style. */
@@ -199,13 +205,17 @@ export const usePlayground = create<State & Actions>()((set) => {
     }));
 
   return {
+    ready: false,
     styleId: "flat",
     view: "single",
     scope: "style",
     rollId: 0,
+    transparent: false,
     memory: Object.fromEntries(
       STYLES.map((style, i) => [style.id, firstMemory(style.id, i)]),
     ) as Record<StyleId, StyleMemory>,
+
+    setReady: () => set({ ready: true }),
 
     selectStyle: (id) =>
       set((s) => ({
@@ -226,6 +236,8 @@ export const usePlayground = create<State & Actions>()((set) => {
       })),
 
     setScope: (scope) => set({ scope }),
+
+    setTransparent: (transparent) => set({ transparent }),
 
     roll: () =>
       set((s) =>

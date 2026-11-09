@@ -153,21 +153,22 @@ export const geometric = defineStyle<GeometricConfig>({
     return { ...base, headC, bodyC, hairC, decoC, splitC };
   },
 
-  render(c, uid) {
+  render(c, uid, { transparent } = {}) {
     const { bg, headC, bodyC, hairC, decoC, splitC, hair } = c;
     const headD = HEAD[c.headS];
     const o = [
       `<defs><clipPath id="${uid}-h"><path d="${headD}"/></clipPath></defs>`,
-      `<rect width="200" height="200" fill="${bg}"/>`,
+      transparent ? "" : `<rect width="200" height="200" fill="${bg}"/>`,
     ];
-    o.push(
-      {
-        ring: `<circle cx="158" cy="42" r="20" fill="none" stroke="${decoC}" stroke-width="10"/>`,
-        quarter: `<path d="M200 0 V92 A92 92 0 0 1 108 0 Z" fill="${decoC}"/>`,
-        stripes: `<g fill="${decoC}">${[0, 1, 2].map((k) => `<rect x="18" y="${22 + k * 12}" width="34" height="6"/>`).join("")}</g>`,
-        dots: `<g fill="${decoC}">${[0, 1, 2].flatMap((k) => [0, 1, 2].map((m) => `<circle cx="${152 + k * 12}" cy="${24 + m * 12}" r="3.2"/>`)).join("")}</g>`,
-      }[c.deco],
-    );
+    if (!transparent)
+      o.push(
+        {
+          ring: `<circle cx="158" cy="42" r="20" fill="none" stroke="${decoC}" stroke-width="10"/>`,
+          quarter: `<path d="M200 0 V92 A92 92 0 0 1 108 0 Z" fill="${decoC}"/>`,
+          stripes: `<g fill="${decoC}">${[0, 1, 2].map((k) => `<rect x="18" y="${22 + k * 12}" width="34" height="6"/>`).join("")}</g>`,
+          dots: `<g fill="${decoC}">${[0, 1, 2].flatMap((k) => [0, 1, 2].map((m) => `<circle cx="${152 + k * 12}" cy="${24 + m * 12}" r="3.2"/>`)).join("")}</g>`,
+        }[c.deco],
+      );
     o.push(`<path d="${BODY[c.bodyS]}" fill="${bodyC}"/>`);
     o.push(
       `<rect x="90" y="124" width="20" height="32" fill="${shade(headC, -0.15)}"/>`,

@@ -62,6 +62,27 @@ describe("engine", () => {
         expect(xmlProblem(svgOf(id, engine.defaults))).toBeNull();
       });
 
+      it("transparent leaves out the background only", () => {
+        const r = makeRng(11);
+        for (const c of [engine.defaults, engine.random(r), engine.random(r)]) {
+          const full = engine.render(c, "t");
+          const bare = engine.render(c, "t", { transparent: true });
+          expect(bare.length).toBeLessThan(full.length);
+          expect(bare).not.toMatch(/<rect width="200" height="200" fill="#/);
+          expect(
+            xmlProblem(
+              renderAvatar(id, c, { frame: style.frame, transparent: true }),
+            ),
+          ).toBeNull();
+          // Everything drawn transparent is also drawn normally, in order.
+          let at = 0;
+          for (const piece of bare.split(/(?=<)/)) {
+            at = full.indexOf(piece, at);
+            expect(at, piece).toBeGreaterThanOrEqual(0);
+          }
+        }
+      });
+
       it("same seed, same avatar", () => {
         const a = engine.random(makeRng(42));
         const b = engine.random(makeRng(42));

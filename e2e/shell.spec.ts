@@ -1,4 +1,5 @@
 import { expect, test } from "@playwright/test";
+import { ready } from "./ready";
 
 // M1.1: the app frame in both themes and at the three checked sizes.
 
@@ -7,6 +8,7 @@ test.describe("theme", () => {
     for (const scheme of ["light", "dark"] as const) {
       const page = await browser.newPage({ colorScheme: scheme });
       await page.goto("/");
+      await ready(page);
       await expect(page.locator("html")).toHaveAttribute("data-theme", scheme);
       await page.close();
     }
@@ -20,6 +22,7 @@ test.describe("theme", () => {
       viewport: { width: 1440, height: 900 },
     });
     await page.goto("/");
+    await ready(page);
     await page.getByRole("button", { name: "Light theme" }).click();
     await expect(page.locator("html")).toHaveAttribute("data-theme", "light");
     expect(
@@ -27,6 +30,8 @@ test.describe("theme", () => {
     ).toBe("light");
 
     await page.reload();
+
+    await ready(page);
     await expect(page.locator("html")).toHaveAttribute("data-theme", "light");
 
     await page.getByRole("button", { name: "Dark theme" }).click();
@@ -52,6 +57,7 @@ test.describe("layout", () => {
           viewport: { width: w, height: h },
         });
         await page.goto("/");
+        await ready(page);
         const rail = page.getByRole("navigation", { name: "Styles" });
         const panel = page.getByRole("complementary", { name: "Customize" });
         await expect(rail).toBeVisible();
@@ -76,6 +82,7 @@ test.describe("layout", () => {
       viewport: { width: 390, height: 844 },
     });
     await page.goto("/");
+    await ready(page);
     await expect(
       page.getByRole("navigation", { name: "Styles" }),
     ).toBeVisible();
@@ -96,6 +103,7 @@ test.describe("layout", () => {
       viewport: { width: 1024, height: 768 },
     });
     await page.goto("/");
+    await ready(page);
     await expect(
       page.getByRole("complementary", { name: "Customize" }),
     ).toBeHidden();

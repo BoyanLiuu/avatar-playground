@@ -114,15 +114,16 @@ export const monsters = defineStyle<MonstersConfig>({
     };
   },
 
-  render(c, uid) {
+  render(c, uid, { transparent } = {}) {
     const { bodyD, spotR, dx, dy } = monstersTexture(c.wobble);
     const { body } = c;
     const D = shade(body, -0.22);
     const L = shade(body, 0.35);
     const o = [
       `<defs><clipPath id="${uid}-b"><path d="${bodyD}"/></clipPath><clipPath id="${uid}-m"><path d="M70 126 Q100 158 130 126 Z"/></clipPath></defs>`,
-      `<rect width="200" height="200" fill="${c.bg}"/>`,
-      `<ellipse cx="100" cy="184" rx="54" ry="7" fill="${shade(c.bg, -0.1)}"/>`,
+      transparent
+        ? ""
+        : `<rect width="200" height="200" fill="${c.bg}"/><ellipse cx="100" cy="184" rx="54" ry="7" fill="${shade(c.bg, -0.1)}"/>`,
     ];
     o.push(
       {

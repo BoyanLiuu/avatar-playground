@@ -92,7 +92,7 @@ export const robots = defineStyle<RobotsConfig>({
     };
   },
 
-  render(c, uid) {
+  render(c, uid, { transparent } = {}) {
     const { eqH } = robotsTexture(c.wobble);
     const dark = c.bg === "#1F2A44" || c.bg === "#2B2D42";
     const { metal, glow } = c;
@@ -104,7 +104,9 @@ export const robots = defineStyle<RobotsConfig>({
     const G = `filter="url(#${uid}-g)"`;
     const o = [
       `<defs><filter id="${uid}-g" x="-50%" y="-50%" width="200%" height="200%"><feGaussianBlur stdDeviation="2.4" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter><pattern id="${uid}-grid" width="20" height="20" patternUnits="userSpaceOnUse"><path d="M20 0H0V20" fill="none" stroke="${dark ? "#fff" : "#000"}" stroke-opacity=".07"/></pattern></defs>`,
-      `<rect width="200" height="200" fill="${c.bg}"/><rect width="200" height="200" fill="url(#${uid}-grid)"/>`,
+      transparent
+        ? ""
+        : `<rect width="200" height="200" fill="${c.bg}"/><rect width="200" height="200" fill="url(#${uid}-grid)"/>`,
     ];
     if (c.ant === "ball")
       o.push(

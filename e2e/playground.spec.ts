@@ -1,4 +1,5 @@
 import { type Page, expect, test } from "@playwright/test";
+import { ready } from "./ready";
 
 // M1.2–M1.4: the playground's layout against the plan's checks. Screenshots go to test-results/
 // for side-by-side review with docs/avatar/playground-*.png (light) and docs/avatar/dark/ (dark).
@@ -19,6 +20,7 @@ const open = async (
 ) => {
   const page = await browser.newPage({ colorScheme: scheme, viewport: size });
   await page.goto("/");
+  await ready(page);
   return page;
 };
 

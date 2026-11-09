@@ -1,16 +1,58 @@
 "use client";
 
-import { useLayoutEffect, useRef } from "react";
+import { type RefObject, useLayoutEffect, useRef, useState } from "react";
 import { AvatarImg } from "@/components/avatar-img";
 import { PencilLoop } from "@/components/pencil/pencil";
 import { advance, drawOn } from "@/lib/motion";
+import type { Frame } from "@/content/styles";
 import { cn } from "@/lib/utils";
 
 export type FilmFrame = { key: string; no: number; src: string };
 
+/** Corner rounding of an avatar's frame shape, for unexposed frames. */
+const ROUND: Record<Frame, string> = {
+  circle: "50%",
+  squircle: "23%",
+  square: "0",
+};
+
+/**
+ * How many frames of `size` fit across the element (a strip padded `pad` each side, frames `gap`
+ * apart), kept current as it resizes. Measured before paint, so the strip never shows a wrong
+ * count first.
+ */
+export const useFit = (
+  box: RefObject<HTMLElement | null>,
+  {
+    size,
+    gap,
+    pad,
+    initial,
+  }: { size: number; gap: number; pad: number; initial: number },
+) => {
+  const [count, setCount] = useState(initial);
+  useLayoutEffect(() => {
+    const el = box.current;
+    if (!el) return;
+    const measure = () => {
+      const width = el.clientWidth;
+      if (width)
+        setCount(
+          Math.max(1, Math.floor((width - 2 * pad + gap) / (size + gap))),
+        );
+    };
+    measure();
+    const observer = new ResizeObserver(measure);
+    observer.observe(el);
+    return () => observer.disconnect();
+  }, [box, size, gap, pad]);
+  return count;
+};
+
 /**
  * A length of film (DESIGN.md › Film strip): sprocket rows, avatar frames with edge-print numbers,
- * the circled frame in red. Used for the history strip and, at sheet size, Grid view.
+ * the circled frame in red. Used for the history strip (as many frames as fit, centred, unexposed
+ * frames first while the film is short) and, at sheet size, Grid view.
  */
 export const FilmStrip = ({
   frames,
@@ -21,6 +63,8 @@ export const FilmStrip = ({
   label,
   onFrame,
   roll,
+  blank = 0,
+  shape = "square",
 }: {
   frames: FilmFrame[];
   /** Index of the circled frame, if any. */
@@ -34,6 +78,10 @@ export const FilmStrip = ({
   onFrame?: (index: number) => void;
   /** The roll counter: when it moves and a new frame arrives, the strip advances. */
   roll?: number;
+  /** Unexposed frames before the first one, filling a strip the film does not yet cover. */
+  blank?: number;
+  /** The avatars' frame shape, for the unexposed frames. */
+  shape?: Frame;
 }) => {
   const ref = useRef<HTMLDivElement>(null);
   const newest = frames.at(-1)?.key;
@@ -65,10 +113,27 @@ export const FilmStrip = ({
         "film-strip relative flex overflow-hidden rounded-tile bg-film shadow-strip",
         sheet
           ? "justify-center gap-4 px-6 pt-[22px] pb-5"
-          : "justify-end gap-3 px-4 py-5",
+          : "justify-center gap-3 px-4 py-5",
         compact && "compact gap-2 px-3 py-4",
       )}
     >
+      {Array.from({ length: blank }, (_, k) => (
+        <span
+          key={`blank-${k}`}
+          aria-hidden="true"
+          data-blank
+          className={cn(
+            "flex shrink-0 flex-col items-center",
+            sheet ? "gap-3" : "gap-1.5",
+          )}
+        >
+          <span
+            className="block bg-film-2"
+            style={{ width: size, height: size, borderRadius: ROUND[shape] }}
+          />
+          <span className={cn("leading-none", sheet ? "h-3" : "h-[11px]")} />
+        </span>
+      ))}
       {frames.map((frame, i) => {
         const isCircled = i === circled;
         return (

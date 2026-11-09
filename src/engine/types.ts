@@ -6,6 +6,11 @@ export type Value = string | number | boolean;
 /** A style's avatar config: every field a string ID, a palette colour, a flag or a seed. */
 export type Config = Record<string, Value>;
 
+export type RenderFlags = {
+  /** Leave out the background: its fill and background-only decoration (halo, grid, sparkles…). */
+  transparent?: boolean;
+};
+
 /**
  * One avatar style. `render` is pure: everything random (blob wobble, robot EQ bars, spot
  * positions) is decided in `random` and stored in the config, so a config always draws the same
@@ -24,7 +29,7 @@ export type StyleEngine<C extends Config = Config> = {
   /** A random config; `keep` (the locked fields) wins over every roll. */
   random(r: Rng, keep?: Partial<C>): C;
   /** The 200×200 SVG body. `uid` prefixes any ids, so inline copies never clash. */
-  render(c: C, uid: string): string;
+  render(c: C, uid: string, flags?: RenderFlags): string;
 };
 
 export const defineStyle = <C extends Config>(style: StyleEngine<C>) =>
