@@ -10,12 +10,13 @@ import { type Frame, STYLES, type StyleId, getStyle } from "@/content/styles";
 import { ENGINES, SHEET_SIZE, keepOf, rollSheet } from "@/engine/registry";
 import { makeRng, newSeed, seedNumber } from "@/engine/rng";
 import type { Config } from "@/engine/types";
+import type { SharedAvatar } from "./url";
 
 export type View = "single" | "grid";
 export type Scope = "style" | "any";
 
-/** One exposed frame of film: a numbered avatar. */
-export type Shot = { no: number; seed: string; config: Config };
+/** One exposed frame of film: a numbered avatar, with the seed that rolled it (none if shared). */
+export type Shot = { no: number; seed: string | null; config: Config };
 
 /** What undo steps through: the film, the circled frame, the frame shape and orientation. */
 export type Present = {
@@ -58,6 +59,10 @@ type Actions = {
   roll: () => void;
   /** Shuffle unlocked: a new frame, always in this style. */
   shuffle: () => void;
+  /** A fresh frame in style `id`, which becomes current (a bad link's fallback). */
+  rollStyle: (id: StyleId) => void;
+  /** Open a shared avatar: its style becomes current and the avatar a new frame of its film. */
+  openShared: (avatar: SharedAvatar) => void;
   setPart: (key: string, value: string) => void;
   /** A part's dice: a different option (and colour), on the current frame. */
   rollPart: (sectionKey: string) => void;
@@ -233,6 +238,26 @@ export const usePlayground = create<State & Actions>()((set) => {
       ),
 
     shuffle: () => set((s) => rolled(s, s.styleId)),
+
+    rollStyle: (id) => set((s) => rolled(s, id)),
+
+    openShared: ({ id, config, frame, flip }) =>
+      set((s) => {
+        const m = s.memory[id];
+        const same =
+          JSON.stringify(currentShot(m).config) === JSON.stringify(config) &&
+          m.present.frame === frame &&
+          m.present.flip === flip;
+        if (same) return { styleId: id };
+        const opened = withShot(m, { no: m.next, seed: null, config });
+        return {
+          styleId: id,
+          memory: {
+            ...s.memory,
+            [id]: { ...opened, present: { ...opened.present, frame, flip } },
+          },
+        };
+      }),
 
     setPart: (key, value) =>
       change((m, id) => {

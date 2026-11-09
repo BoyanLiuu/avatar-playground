@@ -43,7 +43,8 @@ export const usePersistedLocks = () =>
   useEffect(() => {
     try {
       const saved = parseLocks(localStorage.getItem(LOCKS_KEY));
-      withoutMotion(() => usePlayground.getState().restoreLocks(saved));
+      if (Object.keys(saved).length)
+        withoutMotion(() => usePlayground.getState().restoreLocks(saved));
     } catch {
       // storage unavailable: locks last for this page only
     }

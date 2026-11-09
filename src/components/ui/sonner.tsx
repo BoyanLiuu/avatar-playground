@@ -16,6 +16,9 @@ const Toaster = ({ ...props }: ToasterProps) => {
     <Sonner
       theme={theme as ToasterProps["theme"]}
       className="toaster group"
+      // DESIGN.md › Motion: an ink toast at the bottom centre that hides after 1.6s.
+      position="bottom-center"
+      duration={1600}
       icons={{
         success: <CircleCheckIcon className="size-4" />,
         info: <InfoIcon className="size-4" />,
@@ -25,15 +28,16 @@ const Toaster = ({ ...props }: ToasterProps) => {
       }}
       style={
         {
-          "--normal-bg": "var(--popover)",
-          "--normal-text": "var(--popover-foreground)",
-          "--normal-border": "var(--border)",
-          "--border-radius": "var(--radius)",
+          "--normal-bg": "var(--primary-bg)",
+          "--normal-text": "var(--primary-fg)",
+          "--normal-border": "var(--band-control-edge)",
+          "--border-radius": "var(--radius-control)",
         } as React.CSSProperties
       }
       toastOptions={{
         classNames: {
-          toast: "cn-toast",
+          toast:
+            "cn-toast !right-0 !left-0 !mx-auto !w-fit !px-4 !py-2.5 font-sans !text-[14px] !font-semibold !shadow-primary",
         },
       }}
       {...props}

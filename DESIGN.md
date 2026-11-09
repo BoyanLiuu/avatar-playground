@@ -463,7 +463,7 @@ Motion tells the contact-sheet story and nothing else. Two easings and four dura
 - **Lock:** the yellow underline draws on left to right in 240ms under the section title and under the new chip in the "Randomize keeps" line. Unlocking removes it.
 - **Grid:** the three strips of the contact sheet enter staggered at 0, 40 and 80ms, each rising 10px and fading in over 300ms.
 - **Restore from history:** the loop lifts from the current frame and draws on around the chosen one; the print swaps.
-- **Copy SVG:** an ink toast ("SVG copied", `role=status`) fades in over 120ms and rises 8px over 240ms at the bottom centre, then hides after 1.6s.
+- **Copy SVG / Copy share link:** an ink toast ("SVG copied", "Link copied", `role=status`) fades in over 120ms and rises 8px over 240ms at the bottom centre, then hides after 1.6s. It hugs its text and carries a 1px band-control-edge hairline, so it stays distinct where it overlaps the film strip (ink on film in light). A bad share link gets the same toast for 4s: "That link didn’t work, so here’s a fresh avatar."
 - **No queue:** every roll restarts the motion (classes are replayed), so rapid rolls never pile up. Space rolls only when no control has focus (so Space still activates a focused button) and never on key repeat.
 - **Reduced motion:** no slide and no draw. The strip does not shift; loop, underline, develop, frame landing and grid entrance all become 120ms fades; the crop marks do not redraw; the toast fades without moving.
 - **Static renders:** the PNGs show the settled state; motion is live only in `../docs/avatar/motion-demo.html`.

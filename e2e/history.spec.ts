@@ -68,15 +68,21 @@ test("undo and redo: buttons and ⌘Z / ⇧⌘Z step through rolls and picks", a
 test("undo keeps 50 steps", async ({ browser }) => {
   const page = await open(browser);
   // Real key events, dispatched in bulk so 165 of them stay quick.
-  const press = (count: number, init: KeyboardEventInit) =>
+  type Key = {
+    key: string;
+    code: string;
+    metaKey?: boolean;
+    shiftKey?: boolean;
+  };
+  const press = (count: number, init: Key) =>
     page.evaluate(
-      ([n, opts]) => {
+      ({ n, opts }) => {
         for (let k = 0; k < n; k++)
           document.body.dispatchEvent(
             new KeyboardEvent("keydown", { bubbles: true, ...opts }),
           );
       },
-      [count, init] as const,
+      { n: count, opts: init },
     );
   await page.evaluate(() => (document.activeElement as HTMLElement)?.blur());
   await press(55, { key: " ", code: "Space" });

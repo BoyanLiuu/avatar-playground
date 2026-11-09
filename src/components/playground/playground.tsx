@@ -7,6 +7,7 @@ import { TopBand } from "@/components/shell/top-band";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { STYLES } from "@/content/styles";
 import { usePersistedLocks } from "@/store/locks";
+import { useShareLink } from "@/store/share";
 import { useCurrent, usePlayground } from "@/store/playground";
 import {
   CustomizeColumn,
@@ -62,6 +63,7 @@ export const Playground = () => {
   const [tab, setTab] = useState<string>("");
   useShortcuts();
   usePersistedLocks();
+  useShareLink();
   // The phone's part tab falls back to the style's first tile part.
   const phoneTab = style.sections.some((s) => s.key === tab)
     ? tab

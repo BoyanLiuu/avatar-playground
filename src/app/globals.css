@@ -300,3 +300,10 @@
     opacity: 0.35;
   }
 }
+
+/* Reduced motion: toasts fade without moving. */
+@media (prefers-reduced-motion: reduce) {
+  [data-sonner-toast] {
+    transition: opacity var(--dur-fast) linear !important;
+  }
+}

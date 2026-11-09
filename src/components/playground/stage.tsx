@@ -16,6 +16,7 @@ import {
   Undo2Icon,
 } from "lucide-react";
 import { type ReactNode, useEffect, useRef } from "react";
+import { toast } from "sonner";
 import { AvatarImg } from "@/components/avatar-img";
 import { CropMarks, PencilUnderline } from "@/components/pencil/pencil";
 import {
@@ -38,6 +39,7 @@ import {
   useCurrent,
   usePlayground,
 } from "@/store/playground";
+import { shareUrl, writeLink } from "@/store/share";
 import {
   IconButton,
   btnGhost,
@@ -51,7 +53,7 @@ import { type FilmFrame, FilmStrip } from "./film-strip";
 import { KeyCap } from "./key-cap";
 import { ScopeToggle } from "./style-list";
 
-// The share link (M3.2) and export (M4) are shown but not wired yet.
+// Export (M4) is shown but not wired yet.
 
 const PNG_SIZES = (style: StyleDef) =>
   style.id === "pixel" ? [200, 400, 800, 1000] : [256, 512, 1024];
@@ -427,6 +429,16 @@ const GridView = ({ locked }: { locked: string[] }) => {
   );
 };
 
+const copyLink = async () => {
+  writeLink();
+  try {
+    await navigator.clipboard.writeText(shareUrl());
+    toast("Link copied");
+  } catch {
+    toast("Couldn’t copy the link. Copy it from the address bar.");
+  }
+};
+
 /** The stage (DESIGN.md › Layout): the current avatar, its actions and the film-strip history. */
 export const Stage = ({
   customize,
@@ -447,10 +459,14 @@ export const Stage = ({
       <div className="flex h-8 w-full items-center justify-between gap-3">
         <div className="flex items-center gap-1.5">
           <span className="edge-label">
-            Frame <b className="font-bold text-ink">{shot.no}</b> · seed{" "}
-            {shot.seed}
+            Frame <b className="font-bold text-ink">{shot.no}</b> ·{" "}
+            {shot.seed ? `seed ${shot.seed}` : "shared"}
           </span>
-          <IconButton label="Copy share link" className={btnGhost} disabled>
+          <IconButton
+            label="Copy share link"
+            className={btnGhost}
+            onClick={copyLink}
+          >
             <LinkIcon className="size-[15px]" />
           </IconButton>
         </div>
