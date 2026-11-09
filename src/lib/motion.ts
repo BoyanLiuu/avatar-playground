@@ -13,6 +13,20 @@ export const reducedMotion = () =>
   typeof window !== "undefined" &&
   window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
+let paused = false;
+
+/**
+ * Apply a change without motion (restoring saved state after load: nothing animates on load). The
+ * React commit and its effects run before the pause ends.
+ */
+export const withoutMotion = (fn: () => void) => {
+  paused = true;
+  fn();
+  setTimeout(() => {
+    paused = false;
+  }, 50);
+};
+
 const stop = (el: Element, id: string) => {
   for (const a of el.getAnimations()) if (a.id === id) a.cancel();
 };
@@ -24,7 +38,7 @@ const play = (
   options: KeyframeAnimationOptions,
 ) => {
   stop(el, id);
-  el.animate(keyframes, { ...options, id });
+  if (!paused) el.animate(keyframes, { ...options, id });
 };
 
 const fade = (el: Element, id: string) =>

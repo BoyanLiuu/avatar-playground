@@ -1,7 +1,8 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { getStyle } from "@/content/styles";
 import { ENGINES, keepOf } from "@/engine/registry";
-import { currentShot, sheetOf, usePlayground } from "./playground";
+import { parseLocks, serializeLocks } from "./locks";
+import { MAX_STEPS, currentShot, sheetOf, usePlayground } from "./playground";
 
 const store = () => usePlayground.getState();
 const mem = (id = store().styleId) => store().memory[id];
@@ -22,7 +23,8 @@ describe("playground store", () => {
       );
     }
     expect(now().no).toBe(9);
-    expect(mem().shots).toHaveLength(9);
+    expect(mem().present.shots).toHaveLength(9);
+    expect(mem()).toMatchObject({ past: [], future: [] });
   });
 
   it("Randomize adds a numbered frame and keeps the locked parts for 20 rolls", () => {
@@ -94,13 +96,10 @@ describe("playground store", () => {
     store().flip();
     store().toggleLock("skin");
     store().roll();
-    expect(mem()).toMatchObject({ frame: "circle", flip: true });
+    expect(mem().present).toMatchObject({ frame: "circle", flip: true });
     store().reset();
-    expect(mem()).toMatchObject({
-      frame: "squircle",
-      flip: false,
-      locks: ["skin", "hair"],
-    });
+    expect(mem().present).toMatchObject({ frame: "squircle", flip: false });
+    expect(mem().locks).toEqual(["skin", "hair"]);
     expect(now()).toMatchObject({ no: 11, config: ENGINES.flat.defaults });
   });
 
@@ -129,5 +128,96 @@ describe("playground store", () => {
     expect(mem("pixel").sheet).toBeNull();
     store().selectStyle("pixel");
     expect(mem("pixel").sheet).not.toBeNull();
+  });
+
+  it("undo and redo step through rolls, picks, frame shape and flip", () => {
+    const states = [mem().present];
+    store().roll();
+    states.push(mem().present);
+    store().setPart("mouth", "smirk");
+    states.push(mem().present);
+    store().setFrame("circle");
+    states.push(mem().present);
+    store().flip();
+    states.push(mem().present);
+    for (let k = states.length - 2; k >= 0; k--) {
+      store().undo();
+      expect(mem().present).toEqual(states[k]);
+    }
+    store().undo(); // nothing left: no-op
+    expect(mem().present).toEqual(states[0]);
+    for (let k = 1; k < states.length; k++) {
+      store().redo();
+      expect(mem().present).toEqual(states[k]);
+    }
+    // Undoing a roll takes its frame off the film; frame numbers are never reused.
+    store().undo();
+    store().undo();
+    store().undo();
+    store().undo();
+    expect(mem().present.shots.map((s) => s.no)).not.toContain(10);
+    store().roll();
+    expect(now().no).toBe(11);
+    expect(mem().future).toEqual([]);
+  });
+
+  it("undo keeps 50 steps", () => {
+    const states = [mem().present];
+    for (let n = 0; n < 60; n++) {
+      if (n % 3) store().roll();
+      else store().rollPart("eyes");
+      states.push(mem().present);
+    }
+    for (let n = 0; n < 60; n++) store().undo();
+    expect(mem().past).toHaveLength(0);
+    expect(mem().present).toEqual(states[60 - MAX_STEPS]);
+    for (let n = 0; n < 60; n++) store().redo();
+    expect(mem().present).toEqual(states[60]);
+  });
+
+  it("restoring an earlier frame makes it current, as an undo step", () => {
+    store().roll();
+    store().roll();
+    store().restore(5);
+    expect(now().no).toBe(5);
+    const eyes = now().config.eyes === "wink" ? "dot" : "wink";
+    store().setPart("eyes", eyes);
+    expect(mem().present.shots.find((s) => s.no === 5)!.config.eyes).toBe(eyes);
+    store().restore(999); // not on the film: no-op
+    expect(now().no).toBe(5);
+    store().undo();
+    store().undo();
+    expect(now().no).toBe(11);
+  });
+
+  it("locks are not undo steps", () => {
+    store().toggleLock("eyes");
+    store().roll();
+    store().toggleLock("mouth");
+    store().undo();
+    expect(mem().locks).toEqual(["skin", "hair", "eyes", "mouth"]);
+  });
+
+  it("saved locks: round trip, and anything malformed or unknown is ignored", () => {
+    const saved = parseLocks(
+      serializeLocks({ flat: ["eyes", "skin"], robots: [] }),
+    );
+    expect(saved).toEqual({ flat: ["eyes", "skin"], robots: [] });
+    store().restoreLocks({ ...saved, pixel: ["hair", "nope", "<script>"] });
+    expect(mem("flat").locks).toEqual(["skin", "eyes"]);
+    expect(mem("robots").locks).toEqual([]);
+    expect(mem("pixel").locks).toEqual(["hair"]);
+    expect(mem("doodle").locks).toEqual(["hair"]);
+    for (const bad of [
+      null,
+      "",
+      "{",
+      "[]",
+      '{"v":2,"locks":{}}',
+      '{"v":1,"locks":{"flat":"skin"}}',
+      '{"v":1,"locks":{"cats":["skin"]}}',
+      JSON.stringify({ v: 1, locks: { flat: ["x".repeat(100)] } }),
+    ])
+      expect(parseLocks(bad)).toEqual({});
   });
 });

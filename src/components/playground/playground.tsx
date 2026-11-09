@@ -6,6 +6,7 @@ import { CustomizeSheet } from "@/components/shell/customize-sheet";
 import { TopBand } from "@/components/shell/top-band";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { STYLES } from "@/content/styles";
+import { usePersistedLocks } from "@/store/locks";
 import { useCurrent, usePlayground } from "@/store/playground";
 import {
   CustomizeColumn,
@@ -21,14 +22,26 @@ const CONTROL =
   "button, a, input, textarea, select, [contenteditable], [role=radio], [role=tab], [role=menuitem], [role=option]";
 const TYPING = "input, textarea, select, [contenteditable], [role=menu]";
 
-/** Space randomizes (or rolls a new sheet in Grid); 1–6 switch style. Never on key repeat. */
+/**
+ * Space randomizes (or rolls a new sheet in Grid), never on key repeat; 1–6 switch style;
+ * ⌘Z / Ctrl+Z undo, ⇧⌘Z / Ctrl+Shift+Z / Ctrl+Y redo.
+ */
 const useShortcuts = () =>
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => {
-      if (e.repeat || e.metaKey || e.ctrlKey || e.altKey) return;
       const target = e.target instanceof Element ? e.target : null;
       if (target?.closest(TYPING)) return;
       const s = usePlayground.getState();
+      const key = e.key.toLowerCase();
+      if ((e.metaKey || e.ctrlKey) && !e.altKey) {
+        const redo = (key === "z" && e.shiftKey) || (key === "y" && e.ctrlKey);
+        if (key !== "z" && !redo) return;
+        e.preventDefault();
+        if (redo) s.redo();
+        else s.undo();
+        return;
+      }
+      if (e.repeat || e.metaKey || e.ctrlKey || e.altKey) return;
       if (e.code === "Space") {
         if (target?.closest(CONTROL)) return;
         e.preventDefault();
@@ -48,6 +61,7 @@ export const Playground = () => {
   const { style } = useCurrent();
   const [tab, setTab] = useState<string>("");
   useShortcuts();
+  usePersistedLocks();
   // The phone's part tab falls back to the style's first tile part.
   const phoneTab = style.sections.some((s) => s.key === tab)
     ? tab

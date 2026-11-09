@@ -1,6 +1,10 @@
-// The playground's state (zustand). Each style keeps its own memory (film, locks, frame shape,
-// flip, contact sheet), so switching styles and back brings everything back. Every config that
-// enters the store is either rolled by the engine or validated by the style's schema.
+// The playground's state (zustand). Each style keeps its own memory, so switching styles and back
+// brings everything back:
+// - `present`: the film, its circled frame, the frame shape and orientation. Every change to it is
+//   an undo step; `past` and `future` hold up to 50 each.
+// - `locks`: a setting, not an undo step; saved across reloads (./locks.ts).
+// - the frame counter and the contact sheet.
+// Every config that enters the store is rolled by the engine or validated by the style's schema.
 import { create } from "zustand";
 import { type Frame, STYLES, type StyleId, getStyle } from "@/content/styles";
 import { ENGINES, SHEET_SIZE, keepOf, rollSheet } from "@/engine/registry";
@@ -13,14 +17,23 @@ export type Scope = "style" | "any";
 /** One exposed frame of film: a numbered avatar. */
 export type Shot = { no: number; seed: string; config: Config };
 
-export type StyleMemory = {
-  /** The film, oldest first; the last shot is the current avatar. */
+/** What undo steps through: the film, the circled frame, the frame shape and orientation. */
+export type Present = {
+  /** The film, oldest first, at most 50 frames. */
   shots: Shot[];
-  /** Locked section keys: Randomize keeps these parts. */
-  locks: string[];
+  /** The circled frame's number: the current avatar. */
+  current: number;
   frame: Frame;
   flip: boolean;
-  /** The next frame number to expose. */
+};
+
+export type StyleMemory = {
+  present: Present;
+  past: Present[];
+  future: Present[];
+  /** Locked section keys: Randomize keeps these parts. */
+  locks: string[];
+  /** The next frame number to expose (never reused, so a number names one avatar). */
   next: number;
   /** Grid view: the contact sheet's seed (its frames derive from it and the locks). */
   sheet: string | null;
@@ -49,16 +62,24 @@ type Actions = {
   /** A part's dice: a different option (and colour), on the current frame. */
   rollPart: (sectionKey: string) => void;
   toggleLock: (sectionKey: string) => void;
+  /** Saved locks, applied once after the page loads. */
+  restoreLocks: (saved: Partial<Record<StyleId, string[]>>) => void;
   setFrame: (frame: Frame) => void;
   flip: () => void;
   /** Back to the style's first avatar, default locks, frame and orientation. */
   reset: () => void;
+  /** Circle an earlier frame of the film: it becomes the current avatar. */
+  restore: (no: number) => void;
+  undo: () => void;
+  redo: () => void;
   rollSheet: () => void;
   pickFrame: (index: number) => void;
   /** Adopt the circled sheet frame and return to Single view. */
   keepFrame: () => void;
 };
 
+/** Undo steps kept each way, and frames kept on the film. */
+export const MAX_STEPS = 50;
 const MAX_SHOTS = 50;
 /** Sample rolls already on each style's film when the page opens. */
 const STARTER_ROLLS = 8;
@@ -71,9 +92,11 @@ const FIRST_SEED: Record<StyleId, string> = {
   geometric: "7a2e64",
 };
 
-export const currentShot = (m: StyleMemory) => m.shots[m.shots.length - 1];
+export const currentShot = (m: StyleMemory) =>
+  m.present.shots.find((s) => s.no === m.present.current) ??
+  m.present.shots[m.present.shots.length - 1];
 
-const defaultLocks = (id: StyleId) =>
+export const defaultLocks = (id: StyleId) =>
   getStyle(id)
     .sections.filter((s) => s.locked)
     .map((s) => s.key);
@@ -95,26 +118,49 @@ const firstMemory = (id: StyleId, index: number): StyleMemory => {
     config: ENGINES[id].defaults,
   };
   return {
-    shots: [...earlier, first],
+    present: {
+      shots: [...earlier, first],
+      current: first.no,
+      frame: getStyle(id).frame,
+      flip: false,
+    },
+    past: [],
+    future: [],
     locks: defaultLocks(id),
-    frame: getStyle(id).frame,
-    flip: false,
     next: first.no + 1,
     sheet: null,
     pick: null,
   };
 };
 
-const withShot = (m: StyleMemory, shot: Shot): StyleMemory => ({
+/** A new undo step: the old present goes onto `past`, and `future` is dropped. */
+const commit = (m: StyleMemory, present: Present): StyleMemory => ({
   ...m,
-  shots: [...m.shots, shot].slice(-MAX_SHOTS),
+  present,
+  past: [...m.past, m.present].slice(-MAX_STEPS),
+  future: [],
+});
+
+const withShot = (m: StyleMemory, shot: Shot): StyleMemory => ({
+  ...commit(m, {
+    ...m.present,
+    shots: [...m.present.shots, shot].slice(-MAX_SHOTS),
+    current: shot.no,
+  }),
   next: Math.max(m.next, shot.no + 1),
 });
 
-const withConfig = (m: StyleMemory, config: Config): StyleMemory => ({
-  ...m,
-  shots: [...m.shots.slice(0, -1), { ...currentShot(m), config }],
-});
+const withConfig = (m: StyleMemory, config: Config): StyleMemory => {
+  const { present } = m;
+  if (JSON.stringify(currentShot(m).config) === JSON.stringify(config))
+    return m;
+  return commit(m, {
+    ...present,
+    shots: present.shots.map((s) =>
+      s.no === present.current ? { ...s, config } : s,
+    ),
+  });
+};
 
 const keepIn = (id: StyleId, m: StyleMemory) =>
   keepOf(id, currentShot(m).config, m.locks);
@@ -134,173 +180,220 @@ const rolled = (s: State, id: StyleId): Partial<State> => {
   };
 };
 
-export const usePlayground = create<State & Actions>()((set) => ({
-  styleId: "flat",
-  view: "single",
-  scope: "style",
-  rollId: 0,
-  memory: Object.fromEntries(
-    STYLES.map((style, i) => [style.id, firstMemory(style.id, i)]),
-  ) as Record<StyleId, StyleMemory>,
+/** Locks in section order, known keys only (saved locks come from outside). */
+const cleanLocks = (id: StyleId, keys: readonly string[]) =>
+  getStyle(id)
+    .sections.map((x) => x.key)
+    .filter((k) => keys.includes(k));
 
-  selectStyle: (id) =>
+export const usePlayground = create<State & Actions>()((set) => {
+  /** Change the current style's memory. */
+  const change = (fn: (m: StyleMemory, id: StyleId) => StyleMemory) =>
     set((s) => ({
-      styleId: id,
-      memory:
-        s.view === "grid"
-          ? { ...s.memory, [id]: ensureSheet(s.memory[id]) }
-          : s.memory,
-    })),
+      memory: { ...s.memory, [s.styleId]: fn(s.memory[s.styleId], s.styleId) },
+    }));
 
-  setView: (view) =>
-    set((s) => ({
-      view,
-      memory:
-        view === "grid"
-          ? { ...s.memory, [s.styleId]: ensureSheet(s.memory[s.styleId]) }
-          : s.memory,
-    })),
+  return {
+    styleId: "flat",
+    view: "single",
+    scope: "style",
+    rollId: 0,
+    memory: Object.fromEntries(
+      STYLES.map((style, i) => [style.id, firstMemory(style.id, i)]),
+    ) as Record<StyleId, StyleMemory>,
 
-  setScope: (scope) => set({ scope }),
+    selectStyle: (id) =>
+      set((s) => ({
+        styleId: id,
+        memory:
+          s.view === "grid"
+            ? { ...s.memory, [id]: ensureSheet(s.memory[id]) }
+            : s.memory,
+      })),
 
-  roll: () =>
-    set((s) =>
-      rolled(
-        s,
-        s.scope === "any"
-          ? STYLES[Math.floor(Math.random() * STYLES.length)].id
-          : s.styleId,
+    setView: (view) =>
+      set((s) => ({
+        view,
+        memory:
+          view === "grid"
+            ? { ...s.memory, [s.styleId]: ensureSheet(s.memory[s.styleId]) }
+            : s.memory,
+      })),
+
+    setScope: (scope) => set({ scope }),
+
+    roll: () =>
+      set((s) =>
+        rolled(
+          s,
+          s.scope === "any"
+            ? STYLES[Math.floor(Math.random() * STYLES.length)].id
+            : s.styleId,
+        ),
       ),
-    ),
 
-  shuffle: () => set((s) => rolled(s, s.styleId)),
+    shuffle: () => set((s) => rolled(s, s.styleId)),
 
-  setPart: (key, value) =>
-    set((s) => {
-      const id = s.styleId;
-      const m = s.memory[id];
-      const config = { ...currentShot(m).config, [key]: value };
-      if (!ENGINES[id].schema.safeParse(config).success) return {};
-      return { memory: { ...s.memory, [id]: withConfig(m, config) } };
-    }),
+    setPart: (key, value) =>
+      change((m, id) => {
+        const config = { ...currentShot(m).config, [key]: value };
+        return ENGINES[id].schema.safeParse(config).success
+          ? withConfig(m, config)
+          : m;
+      }),
 
-  rollPart: (sectionKey) =>
-    set((s) => {
-      const id = s.styleId;
-      const section = getStyle(id).sections.find((x) => x.key === sectionKey);
-      if (!section) return {};
-      const m = s.memory[id];
-      const r = makeRng(seedNumber(newSeed()));
-      const now = currentShot(m).config;
-      const other = (list: readonly string[], value: Config[string]) => {
-        const pool = list.filter((v) => v !== value);
-        return pool.length ? r.pick(pool) : value;
-      };
-      const config = { ...now };
-      if (section.kind === "tiles") {
-        config[section.key] = other(section.options, now[section.key]);
-        if (section.sub)
-          config[section.sub.key] = other(
-            section.sub.colors,
-            now[section.sub.key],
-          );
-      } else config[section.key] = other(section.colors, now[section.key]);
-      return { memory: { ...s.memory, [id]: withConfig(m, config) } };
-    }),
+    rollPart: (sectionKey) =>
+      change((m, id) => {
+        const section = getStyle(id).sections.find((x) => x.key === sectionKey);
+        if (!section) return m;
+        const r = makeRng(seedNumber(newSeed()));
+        const now = currentShot(m).config;
+        const other = (list: readonly string[], value: Config[string]) => {
+          const pool = list.filter((v) => v !== value);
+          return pool.length ? r.pick(pool) : value;
+        };
+        const config = { ...now };
+        if (section.kind === "tiles") {
+          config[section.key] = other(section.options, now[section.key]);
+          if (section.sub)
+            config[section.sub.key] = other(
+              section.sub.colors,
+              now[section.sub.key],
+            );
+        } else config[section.key] = other(section.colors, now[section.key]);
+        return withConfig(m, config);
+      }),
 
-  toggleLock: (sectionKey) =>
-    set((s) => {
-      const id = s.styleId;
-      const m = s.memory[id];
-      const on = !m.locks.includes(sectionKey);
-      const locks = getStyle(id)
-        .sections.map((x) => x.key)
-        .filter((k) => (k === sectionKey ? on : m.locks.includes(k)));
-      return { memory: { ...s.memory, [id]: { ...m, locks } } };
-    }),
+    toggleLock: (sectionKey) =>
+      change((m, id) => ({
+        ...m,
+        locks: m.locks.includes(sectionKey)
+          ? m.locks.filter((k) => k !== sectionKey)
+          : cleanLocks(id, [...m.locks, sectionKey]),
+      })),
 
-  setFrame: (frame) =>
-    set((s) => {
-      const m = s.memory[s.styleId];
-      return { memory: { ...s.memory, [s.styleId]: { ...m, frame } } };
-    }),
+    restoreLocks: (saved) =>
+      set((s) => ({
+        memory: Object.fromEntries(
+          STYLES.map(({ id }) => [
+            id,
+            saved[id]
+              ? { ...s.memory[id], locks: cleanLocks(id, saved[id]) }
+              : s.memory[id],
+          ]),
+        ) as Record<StyleId, StyleMemory>,
+      })),
 
-  flip: () =>
-    set((s) => {
-      const m = s.memory[s.styleId];
-      return {
-        memory: { ...s.memory, [s.styleId]: { ...m, flip: !m.flip } },
-      };
-    }),
+    setFrame: (frame) =>
+      change((m) =>
+        m.present.frame === frame ? m : commit(m, { ...m.present, frame }),
+      ),
 
-  reset: () =>
-    set((s) => {
-      const id = s.styleId;
-      const m = s.memory[id];
-      const shot = {
-        no: m.next,
-        seed: FIRST_SEED[id],
-        config: ENGINES[id].defaults,
-      };
-      return {
-        rollId: s.rollId + 1,
-        memory: {
-          ...s.memory,
-          [id]: withShot(
-            {
-              ...m,
+    flip: () =>
+      change((m) => commit(m, { ...m.present, flip: !m.present.flip })),
+
+    reset: () =>
+      set((s) => {
+        const id = s.styleId;
+        const m = s.memory[id];
+        const shot = {
+          no: m.next,
+          seed: FIRST_SEED[id],
+          config: ENGINES[id].defaults,
+        };
+        const reset = withShot(m, shot);
+        return {
+          rollId: s.rollId + 1,
+          memory: {
+            ...s.memory,
+            [id]: {
+              ...reset,
+              present: {
+                ...reset.present,
+                frame: getStyle(id).frame,
+                flip: false,
+              },
               locks: defaultLocks(id),
-              frame: getStyle(id).frame,
-              flip: false,
             },
-            shot,
-          ),
-        },
-      };
-    }),
+          },
+        };
+      }),
 
-  rollSheet: () =>
-    set((s) => {
-      const m = s.memory[s.styleId];
-      return {
-        memory: {
-          ...s.memory,
-          [s.styleId]: { ...m, sheet: newSeed(), pick: null },
-        },
-      };
-    }),
+    restore: (no) =>
+      change((m) =>
+        m.present.current === no ||
+        !m.present.shots.some((shot) => shot.no === no)
+          ? m
+          : commit(m, { ...m.present, current: no }),
+      ),
 
-  pickFrame: (index) =>
-    set((s) => {
-      const m = s.memory[s.styleId];
-      return {
-        memory: { ...s.memory, [s.styleId]: { ...m, pick: index } },
-      };
-    }),
+    undo: () =>
+      change((m) =>
+        m.past.length
+          ? {
+              ...m,
+              present: m.past[m.past.length - 1],
+              past: m.past.slice(0, -1),
+              future: [m.present, ...m.future].slice(0, MAX_STEPS),
+            }
+          : m,
+      ),
 
-  keepFrame: () =>
-    set((s) => {
-      const id = s.styleId;
-      const m = s.memory[id];
-      if (!m.sheet || m.pick === null) return {};
-      const config = rollSheet(id, m.sheet, keepIn(id, m))[m.pick];
-      const kept = withShot(m, { no: m.next + m.pick, seed: m.sheet, config });
-      return {
-        view: "single",
-        rollId: s.rollId + 1,
-        memory: {
-          ...s.memory,
-          [id]: { ...kept, next: m.next + SHEET_SIZE, sheet: null, pick: null },
-        },
-      };
-    }),
-}));
+    redo: () =>
+      change((m) =>
+        m.future.length
+          ? {
+              ...m,
+              present: m.future[0],
+              past: [...m.past, m.present].slice(-MAX_STEPS),
+              future: m.future.slice(1),
+            }
+          : m,
+      ),
 
-/** The current style, its memory and its current frame. */
+    rollSheet: () => change((m) => ({ ...m, sheet: newSeed(), pick: null })),
+
+    pickFrame: (index) => change((m) => ({ ...m, pick: index })),
+
+    keepFrame: () =>
+      set((s) => {
+        const id = s.styleId;
+        const m = s.memory[id];
+        if (!m.sheet || m.pick === null) return {};
+        const config = rollSheet(id, m.sheet, keepIn(id, m))[m.pick];
+        const kept = withShot(m, {
+          no: m.next + m.pick,
+          seed: m.sheet,
+          config,
+        });
+        return {
+          view: "single",
+          rollId: s.rollId + 1,
+          memory: {
+            ...s.memory,
+            [id]: {
+              ...kept,
+              next: m.next + SHEET_SIZE,
+              sheet: null,
+              pick: null,
+            },
+          },
+        };
+      }),
+  };
+});
+
+/** The current style, its memory, its present and its current frame. */
 export const useCurrent = () => {
   const id = usePlayground((s) => s.styleId);
   const memory = usePlayground((s) => s.memory[s.styleId]);
-  return { id, style: getStyle(id), memory, shot: currentShot(memory) };
+  return {
+    id,
+    style: getStyle(id),
+    memory,
+    present: memory.present,
+    shot: currentShot(memory),
+  };
 };
 
 /** The contact sheet's twelve frames: rolled from its seed, keeping the current locks. */

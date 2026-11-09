@@ -30,7 +30,7 @@ export const FilmStrip = ({
   sheet?: boolean;
   compact?: boolean;
   label: string;
-  /** Makes frames buttons that pick (Grid). Without it frames are inert (history until M3.1). */
+  /** Makes frames buttons: restore (history) or pick (Grid). Without it frames are inert. */
   onFrame?: (index: number) => void;
   /** The roll counter: when it moves and a new frame arrives, the strip advances. */
   roll?: number;

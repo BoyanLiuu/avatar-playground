@@ -17,8 +17,8 @@ const useThumbs = () => {
     STYLES.map(({ id }) => [
       id,
       avatarSrc(id, currentShot(memory[id]).config, {
-        frame: memory[id].frame,
-        flip: memory[id].flip,
+        frame: memory[id].present.frame,
+        flip: memory[id].present.flip,
       }),
     ]),
   ) as Record<StyleId, string>;

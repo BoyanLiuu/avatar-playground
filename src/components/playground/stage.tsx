@@ -32,7 +32,7 @@ import { avatarSrc } from "@/lib/avatar";
 import { develop, drawOn, redraw, swap } from "@/lib/motion";
 import { cn } from "@/lib/utils";
 import {
-  type StyleMemory,
+  type Present,
   type View,
   sheetOf,
   useCurrent,
@@ -51,7 +51,7 @@ import { type FilmFrame, FilmStrip } from "./film-strip";
 import { KeyCap } from "./key-cap";
 import { ScopeToggle } from "./style-list";
 
-// M2: undo and redo (M3.1), the share link (M3.2) and export (M4) are shown but not wired yet.
+// The share link (M3.2) and export (M4) are shown but not wired yet.
 
 const PNG_SIZES = (style: StyleDef) =>
   style.id === "pixel" ? [200, 400, 800, 1000] : [256, 512, 1024];
@@ -157,21 +157,33 @@ const LockedLine = ({
 };
 
 const Toolbar = ({ withExport = false }: { withExport?: boolean }) => {
-  const { memory } = useCurrent();
+  const { memory, present } = useCurrent();
+  const undo = usePlayground((s) => s.undo);
+  const redo = usePlayground((s) => s.redo);
   const flip = usePlayground((s) => s.flip);
   const reset = usePlayground((s) => s.reset);
   return (
     <>
-      <IconButton label="Undo" className={btnIcon} disabled>
+      <IconButton
+        label="Undo"
+        className={btnIcon}
+        disabled={!memory.past.length}
+        onClick={undo}
+      >
         <Undo2Icon className="size-[18px]" />
       </IconButton>
-      <IconButton label="Redo" className={btnIcon} disabled>
+      <IconButton
+        label="Redo"
+        className={btnIcon}
+        disabled={!memory.future.length}
+        onClick={redo}
+      >
         <Redo2Icon className="size-[18px]" />
       </IconButton>
       {/* A toggle: pressed (ink, like a lock) while the avatar is mirrored. */}
       <IconButton
         label="Flip"
-        aria-pressed={memory.flip}
+        aria-pressed={present.flip}
         className={cn(
           btnIcon,
           "aria-pressed:border-ink aria-pressed:bg-ink aria-pressed:text-paper aria-pressed:hover:bg-ink",
@@ -210,22 +222,53 @@ const RandomizeButton = ({ className }: { className?: string }) => {
   );
 };
 
-/** The film strip's frames: the last `count` shots, drawn in the current frame shape. */
-const filmOf = (id: StyleId, m: StyleMemory, count: number): FilmFrame[] =>
-  m.shots.slice(-count).map((shot) => ({
+/** The history strip: the last `count` frames in the current frame shape, the current circled. */
+const History = ({
+  id,
+  present,
+  count,
+  size,
+  compact,
+  roll,
+}: {
+  id: StyleId;
+  present: Present;
+  count: number;
+  size: number;
+  compact?: boolean;
+  roll: number;
+}) => {
+  const restore = usePlayground((s) => s.restore);
+  const frames: FilmFrame[] = present.shots.slice(-count).map((shot) => ({
     key: `${id}-${shot.no}`,
     no: shot.no,
-    src: avatarSrc(id, shot.config, { frame: m.frame, flip: m.flip }),
+    src: avatarSrc(id, shot.config, {
+      frame: present.frame,
+      flip: present.flip,
+    }),
   }));
+  const circled = frames.findIndex((f) => f.no === present.current);
+  return (
+    <FilmStrip
+      frames={frames}
+      circled={circled < 0 ? null : circled}
+      size={size}
+      compact={compact}
+      label="Earlier rolls"
+      onFrame={(i) => restore(frames[i].no)}
+      roll={roll}
+    />
+  );
+};
 
 const SingleView = ({ locked }: { locked: string[] }) => {
-  const { id, style, memory, shot } = useCurrent();
+  const { id, style, present, shot } = useCurrent();
   const rollId = usePlayground((s) => s.rollId);
   const scope = usePlayground((s) => s.scope);
   const setScope = usePlayground((s) => s.setScope);
   const src = avatarSrc(id, shot.config, {
-    frame: memory.frame,
-    flip: memory.flip,
+    frame: present.frame,
+    flip: present.flip,
   });
 
   // The roll develops the new print and redraws the crop marks; any other change swaps it.
@@ -241,8 +284,6 @@ const SingleView = ({ locked }: { locked: string[] }) => {
     } else if (before.src !== src) swap(img.current);
   }, [rollId, src]);
 
-  const desktop = filmOf(id, memory, 9);
-  const phone = filmOf(id, memory, 7);
   return (
     <>
       <div
@@ -304,21 +345,21 @@ const SingleView = ({ locked }: { locked: string[] }) => {
           <span className="sm:hidden">Tap to restore</span>
         </div>
         <div className="max-sm:hidden">
-          <FilmStrip
-            frames={desktop}
-            circled={desktop.length - 1}
+          <History
+            id={id}
+            present={present}
+            count={9}
             size={64}
-            label="Earlier rolls"
             roll={rollId}
           />
         </div>
         <div className="sm:hidden">
-          <FilmStrip
-            frames={phone}
-            circled={phone.length - 1}
+          <History
+            id={id}
+            present={present}
+            count={7}
             size={44}
             compact
-            label="Earlier rolls"
             roll={rollId}
           />
         </div>
@@ -337,7 +378,10 @@ const GridView = ({ locked }: { locked: string[] }) => {
   const frames = sheetOf(id, memory).map((config, i) => ({
     key: `${memory.sheet}-${i}`,
     no: first + i,
-    src: avatarSrc(id, config, { frame: memory.frame, flip: memory.flip }),
+    src: avatarSrc(id, config, {
+      frame: memory.present.frame,
+      flip: memory.present.flip,
+    }),
   }));
   return (
     <>

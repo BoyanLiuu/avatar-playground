@@ -93,7 +93,7 @@ const FrameShapes = () => {
   return (
     <RadioGroup
       aria-label="Frame shape"
-      value={memory.frame}
+      value={memory.present.frame}
       onValueChange={(v) => setFrame(v as Frame)}
       className="inline-flex shrink-0 gap-0.5 rounded-control border border-rule bg-tray p-[3px]"
     >
@@ -152,7 +152,7 @@ const Tiles = ({
               withOption(id, shot.config, section.key, option),
               {
                 frame: "square",
-                flip: memory.flip,
+                flip: memory.present.flip,
                 crop: section.crop,
               },
             )}
