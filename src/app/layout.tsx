@@ -51,11 +51,13 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
       className={`${barlow.variable} ${barlowCondensed.variable}`}
       suppressHydrationWarning
     >
-      <head>
-        {/* A fixed string, no user input. */}
-        <script dangerouslySetInnerHTML={{ __html: LINK_SCRIPT }} />
-      </head>
       <body>
+        {/* First in <body>, so it runs before anything paints (like next-themes' script). A fixed
+            string, no user input. */}
+        <script
+          suppressHydrationWarning
+          dangerouslySetInnerHTML={{ __html: LINK_SCRIPT }}
+        />
         {/* Follows the OS until the visitor picks a theme (stored as "avatar-theme"). */}
         <ThemeProvider
           attribute="data-theme"
