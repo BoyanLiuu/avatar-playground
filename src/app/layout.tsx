@@ -22,10 +22,15 @@ const barlowCondensed = Barlow_Condensed({
 const OG_ALT =
   "Avatar Playground: six avatar styles on a strip of film, Flat Cartoon, Pixel Art, Robots, Line Doodle, Monsters and Geometric";
 
-// Absolute URLs for the share card need the deployed address: set SITE_URL when building for a
-// host (see README).
+// Absolute URLs for the share card need the deployed address: SITE_URL if set, else Vercel's own
+// production address (set automatically on Vercel builds), else the local dev server.
+const VERCEL = process.env.VERCEL_PROJECT_PRODUCTION_URL;
+const SITE_URL =
+  process.env.SITE_URL ??
+  (VERCEL ? `https://${VERCEL}` : "http://127.0.0.1:3001");
+
 export const metadata: Metadata = {
-  metadataBase: new URL(process.env.SITE_URL ?? "http://127.0.0.1:3001"),
+  metadataBase: new URL(SITE_URL),
   title: "Avatar Playground",
   description:
     "Generate avatars in six styles: pick a style, randomize, tweak each part, lock what you like, then export or share.",

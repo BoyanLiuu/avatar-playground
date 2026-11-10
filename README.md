@@ -53,7 +53,7 @@ The first `pnpm test:e2e` needs Playwright's browsers: `pnpm exec playwright ins
 
 The build is a static site: upload `out/` to any static host (GitHub Pages, Netlify, Cloudflare Pages, S3, Vercel). Two notes:
 
-- Set `SITE_URL` when building, so share cards point at your address: `SITE_URL=https://avatars.example.com pnpm build`.
+- Share cards need the site's address. On Vercel it is picked up automatically (`VERCEL_PROJECT_PRODUCTION_URL`); elsewhere, or for a custom domain, set `SITE_URL` when building: `SITE_URL=https://avatars.example.com pnpm build`.
 - Serve it compressed (gzip or brotli). Every common host does this by default; it roughly halves the download.
 
 Lighthouse on the static build: accessibility 100, best practices 100, SEO 100; performance 100 on desktop and 93 on mobile.
