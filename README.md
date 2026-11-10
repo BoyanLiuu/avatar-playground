@@ -2,6 +2,8 @@
 
 Make an avatar in one of six styles: roll random ones, tweak any part, lock what you like so further rolls keep it, then download a PNG or SVG, or share a link that recreates the exact avatar. Runs entirely in the browser: no account, no server, no tracking.
 
+**Try it: [avatar-playground-v31p.vercel.app](https://avatar-playground-v31p.vercel.app/)**
+
 ![Avatar Playground: the style list, the current avatar on a print with its film-strip history, and the customize panel](e2e/visual.spec.ts-snapshots/flat-desktop-light-chromium-darwin.png)
 
 ## Features
@@ -51,7 +53,9 @@ The first `pnpm test:e2e` needs Playwright's browsers: `pnpm exec playwright ins
 
 ## Deploy
 
-The build is a static site: upload `out/` to any static host (GitHub Pages, Netlify, Cloudflare Pages, S3, Vercel). Two notes:
+The live site is deployed on Vercel from `main`: every push to `main` redeploys [avatar-playground-v31p.vercel.app](https://avatar-playground-v31p.vercel.app/). The project uses Vercel's Next.js preset with one environment variable, `ENABLE_EXPERIMENTAL_COREPACK=1`, so the build uses the pnpm version pinned in `package.json`.
+
+The build is a static site, so any static host works too: upload `out/` to GitHub Pages, Netlify, Cloudflare Pages or S3. Two notes:
 
 - Share cards need the site's address. On Vercel it is picked up automatically (`VERCEL_PROJECT_PRODUCTION_URL`); elsewhere, or for a custom domain, set `SITE_URL` when building: `SITE_URL=https://avatars.example.com pnpm build`.
 - Serve it compressed (gzip or brotli). Every common host does this by default; it roughly halves the download.
