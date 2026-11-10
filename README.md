@@ -91,4 +91,4 @@ Adding a shadcn component: `pnpm dlx shadcn@latest add <name>`, then `pnpm lint 
 
 ## Credits
 
-Made by Boyan Liu. Fonts: [Barlow](https://github.com/jpt/barlow) by Jeremy Tribby, SIL Open Font License 1.1. No license has been chosen for the code yet.
+Made by Boyan Liu. The code is under the [MIT License](LICENSE). Fonts: [Barlow](https://github.com/jpt/barlow) by Jeremy Tribby, under the SIL Open Font License 1.1 (`assets/fonts/OFL.txt`).
