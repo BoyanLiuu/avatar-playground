@@ -2,8 +2,10 @@
 // (./url.ts). replaceState, not pushState, so Back does not step through rolls; debounced,
 // because Safari throws after 100 history updates in 30 seconds.
 import { toast } from "sonner";
+import { getStyle } from "@/content/styles";
+import { ENGINES } from "@/engine/registry";
 import { currentShot, usePlayground } from "./playground";
-import { type SharedAvatar, decodeLink, linkSearch } from "./url";
+import { type SharedAvatar, decodeLink, linkSearch, withoutLink } from "./url";
 
 const DEBOUNCE = 300;
 
@@ -18,13 +20,28 @@ export const currentAvatar = (): SharedAvatar => {
   };
 };
 
+/** The avatar the plain address opens with: no link is needed to share it. */
+const isHome = ({ id, config, frame, flip }: SharedAvatar) =>
+  id === "flat" &&
+  frame === getStyle("flat").frame &&
+  !flip &&
+  JSON.stringify(config) === JSON.stringify(ENGINES.flat.defaults);
+
+/** The query string for the current avatar: its link, or none for the home avatar. */
+const currentSearch = () => {
+  const avatar = currentAvatar();
+  return isHome(avatar)
+    ? withoutLink(location.search)
+    : linkSearch(avatar, location.search);
+};
+
 /** The full share link of the current avatar. */
 export const shareUrl = () =>
-  `${location.origin}${location.pathname}${linkSearch(currentAvatar(), location.search)}${location.hash}`;
+  `${location.origin}${location.pathname}${currentSearch()}${location.hash}`;
 
-/** Put the current avatar's link in the address bar now. */
+/** Put the current avatar's link in the address bar now (a clean address for the home avatar). */
 export const writeLink = () => {
-  const search = linkSearch(currentAvatar(), location.search);
+  const search = currentSearch();
   if (search !== location.search)
     window.history.replaceState(
       null,

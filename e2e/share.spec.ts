@@ -156,3 +156,39 @@ test("broken, old or malicious links never crash and fall back to a fresh avatar
     await context.close();
   }
 });
+
+test("the wordmark goes home: a fresh start and a clean address, locks kept", async ({
+  browser,
+}) => {
+  const { page, context } = await open(browser);
+  await page.keyboard.press("3");
+  await randomize(page).click();
+  await page
+    .getByRole("complementary", { name: "Customize" })
+    .getByRole("button", { name: "Lock Head" })
+    .click();
+  await expect.poll(async () => (await linkOf(page)).get("s")).toBe("robots");
+
+  await page.getByRole("link", { name: "Avatar Playground" }).click();
+  await ready(page);
+  expect(await page.evaluate(() => location.pathname + location.search)).toBe(
+    "/",
+  );
+  await expect(hero(page)).toHaveAttribute(
+    "alt",
+    /^Current avatar: Flat Cartoon, frame 1\./,
+  );
+  await expect(page.getByRole("button", { name: "Undo" })).toBeDisabled();
+  await page.keyboard.press("3");
+  await expect(hero(page)).toHaveAttribute("alt", /Robots, frame 1\./);
+  await expect(
+    page
+      .getByRole("complementary", { name: "Customize" })
+      .getByRole("button", { name: "Lock Head" }),
+  ).toHaveAttribute("aria-pressed", "true");
+  // Any other avatar gets its link; the home avatar keeps the address clean.
+  await expect.poll(async () => (await linkOf(page)).get("s")).toBe("robots");
+  await page.keyboard.press("1");
+  await expect.poll(() => page.evaluate(() => location.search)).toBe("");
+  await context.close();
+});

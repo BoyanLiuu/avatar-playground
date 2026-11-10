@@ -79,6 +79,8 @@ type Actions = {
   flip: () => void;
   /** Back to the style's first avatar, default locks, frame and orientation. */
   reset: () => void;
+  /** Home: every style back to a fresh film on Flat Cartoon, as the site opens. Locks stay. */
+  startOver: () => void;
   /** Circle an earlier frame of the film: it becomes the current avatar. */
   restore: (no: number) => void;
   undo: () => void;
@@ -340,6 +342,18 @@ export const usePlayground = create<State & Actions>()((set) => {
           },
         };
       }),
+
+    startOver: () =>
+      set((s) => ({
+        styleId: "flat",
+        view: "single",
+        memory: Object.fromEntries(
+          STYLES.map(({ id }) => [
+            id,
+            { ...firstMemory(id), locks: s.memory[id].locks },
+          ]),
+        ) as Record<StyleId, StyleMemory>,
+      })),
 
     restore: (no) =>
       change((m) =>

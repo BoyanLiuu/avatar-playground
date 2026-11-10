@@ -220,4 +220,19 @@ describe("playground store", () => {
     ])
       expect(parseLocks(bad)).toEqual({});
   });
+
+  it("start over: every style back to a fresh film on Flat Cartoon, locks kept", () => {
+    store().selectStyle("robots");
+    store().roll();
+    store().toggleLock("head");
+    store().setView("grid");
+    store().startOver();
+    expect(store()).toMatchObject({ styleId: "flat", view: "single" });
+    for (const id of ["flat", "robots"] as const) {
+      expect(mem(id).present.shots).toHaveLength(1);
+      expect(now(id)).toMatchObject({ no: 1, config: ENGINES[id].defaults });
+      expect(mem(id)).toMatchObject({ past: [], future: [], next: 2 });
+    }
+    expect(mem("robots").locks).toEqual(["metal", "head"]);
+  });
 });
