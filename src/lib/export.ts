@@ -12,7 +12,7 @@ export const pngSizes = (id: StyleId) =>
 /** The phone's one-tap PNG size. */
 export const defaultPngSize = (id: StyleId) => (id === "pixel" ? 400 : 512);
 
-/** `avatar-flat-4f2a9c.png`, or `avatar-flat-frame10.png` for a shared frame (no seed). */
+/** `avatar-flat-4f2a9c.png`, or `avatar-flat-frame2.png` for a shared frame (no seed). */
 export const fileName = (id: StyleId, shot: Shot, ext: "png" | "svg") =>
   `avatar-${id}-${shot.seed ?? `frame${shot.no}`}.${ext}`;
 

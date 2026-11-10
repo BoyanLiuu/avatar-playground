@@ -7,11 +7,11 @@ import { avatarSvg, defaultPngSize, fileName, pngSizes } from "./export";
 describe("export", () => {
   it("names files by style and seed, or by frame for a shared avatar", () => {
     const config = ENGINES.flat.defaults;
-    expect(fileName("flat", { no: 9, seed: "4f2a9c", config }, "png")).toBe(
+    expect(fileName("flat", { no: 1, seed: "4f2a9c", config }, "png")).toBe(
       "avatar-flat-4f2a9c.png",
     );
-    expect(fileName("robots", { no: 10, seed: null, config }, "svg")).toBe(
-      "avatar-robots-frame10.svg",
+    expect(fileName("robots", { no: 2, seed: null, config }, "svg")).toBe(
+      "avatar-robots-frame2.svg",
     );
   });
 

@@ -22,8 +22,8 @@ describe("playground store", () => {
           .map((s) => s.key),
       );
     }
-    expect(now().no).toBe(9);
-    expect(mem().present.shots).toHaveLength(9);
+    expect(now().no).toBe(1);
+    expect(mem().present.shots).toHaveLength(1);
     expect(mem()).toMatchObject({ past: [], future: [] });
   });
 
@@ -33,7 +33,7 @@ describe("playground store", () => {
     const seen = new Set<string>();
     for (let n = 0; n < 20; n++) {
       store().roll();
-      expect(now().no).toBe(10 + n);
+      expect(now().no).toBe(2 + n);
       expect(now().config).toMatchObject(keep);
       seen.add(JSON.stringify(now().config));
     }
@@ -46,8 +46,8 @@ describe("playground store", () => {
     store().setScope("any");
     store().roll();
     expect(store().styleId).toBe("robots");
-    expect(now().no).toBe(10);
-    expect(now("flat").no).toBe(9);
+    expect(now().no).toBe(2);
+    expect(now("flat").no).toBe(1);
   });
 
   it("switching Flat → Robots → Flat brings back the same avatar and locks", () => {
@@ -68,7 +68,7 @@ describe("playground store", () => {
     store().setPart("hair", "curly");
     store().setPart("bg", "#FFD9DE");
     expect(now()).toMatchObject({
-      no: 9,
+      no: 1,
       config: { hair: "curly", bg: "#FFD9DE" },
     });
     store().setPart("hair", "mullet");
@@ -100,7 +100,7 @@ describe("playground store", () => {
     store().reset();
     expect(mem().present).toMatchObject({ frame: "squircle", flip: false });
     expect(mem().locks).toEqual(["skin", "hair"]);
-    expect(now()).toMatchObject({ no: 11, config: ENGINES.flat.defaults });
+    expect(now()).toMatchObject({ no: 3, config: ENGINES.flat.defaults });
   });
 
   it("Grid: a sheet of twelve, keep the circled frame under its number", () => {
@@ -114,8 +114,8 @@ describe("playground store", () => {
     store().pickFrame(3);
     store().keepFrame();
     expect(store().view).toBe("single");
-    expect(now()).toEqual({ no: 13, seed, config: sheet[3] });
-    expect(mem()).toMatchObject({ next: 22, sheet: null, pick: null });
+    expect(now()).toEqual({ no: 5, seed, config: sheet[3] });
+    expect(mem()).toMatchObject({ next: 14, sheet: null, pick: null });
   });
 
   it("Grid: switching style in Grid gives that style a sheet; a new sheet clears the pick", () => {
@@ -155,9 +155,9 @@ describe("playground store", () => {
     store().undo();
     store().undo();
     store().undo();
-    expect(mem().present.shots.map((s) => s.no)).not.toContain(10);
+    expect(mem().present.shots.map((s) => s.no)).not.toContain(2);
     store().roll();
-    expect(now().no).toBe(11);
+    expect(now().no).toBe(3);
     expect(mem().future).toEqual([]);
   });
 
@@ -178,16 +178,16 @@ describe("playground store", () => {
   it("restoring an earlier frame makes it current, as an undo step", () => {
     store().roll();
     store().roll();
-    store().restore(5);
-    expect(now().no).toBe(5);
+    store().restore(1);
+    expect(now().no).toBe(1);
     const eyes = now().config.eyes === "wink" ? "dot" : "wink";
     store().setPart("eyes", eyes);
-    expect(mem().present.shots.find((s) => s.no === 5)!.config.eyes).toBe(eyes);
+    expect(mem().present.shots.find((s) => s.no === 1)!.config.eyes).toBe(eyes);
     store().restore(999); // not on the film: no-op
-    expect(now().no).toBe(5);
+    expect(now().no).toBe(1);
     store().undo();
     store().undo();
-    expect(now().no).toBe(11);
+    expect(now().no).toBe(3);
   });
 
   it("locks are not undo steps", () => {

@@ -140,10 +140,10 @@ describe("opening a shared avatar", () => {
     store().openShared({ id: "robots", config, frame: "circle", flip: true });
     const m = store().memory.robots;
     expect(store().styleId).toBe("robots");
-    expect(currentShot(m)).toEqual({ no: 10, seed: null, config });
+    expect(currentShot(m)).toEqual({ no: 2, seed: null, config });
     expect(m.present).toMatchObject({ frame: "circle", flip: true });
     store().undo();
-    expect(currentShot(store().memory.robots).no).toBe(9);
+    expect(currentShot(store().memory.robots).no).toBe(1);
   });
 
   it("opening the avatar that is already current adds nothing", () => {
@@ -153,7 +153,7 @@ describe("opening a shared avatar", () => {
       frame: "squircle",
       flip: false,
     });
-    expect(store().memory.flat.present.shots).toHaveLength(9);
+    expect(store().memory.flat.present.shots).toHaveLength(1);
     expect(store().memory.flat.past).toEqual([]);
   });
 });

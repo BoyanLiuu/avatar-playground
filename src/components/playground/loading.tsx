@@ -35,7 +35,7 @@ export const PlaygroundLoading = () => {
         <div className="relative mt-7 rounded-hero bg-print p-3 shadow-print max-sm:mt-6 max-sm:p-2">
           <AvatarImg
             src={avatarSrc("flat", config, { frame: style.frame })}
-            alt={`Current avatar: ${style.name}, frame 9. ${describeAvatar(style, config)}`}
+            alt={`Current avatar: ${style.name}, frame 1. ${describeAvatar(style, config)}`}
             className="hero-avatar in-data-link:hidden"
           />
           <div

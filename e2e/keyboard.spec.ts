@@ -153,10 +153,10 @@ test("every task with the keyboard alone", async ({ browser }) => {
     page
       .getByRole("group", { name: "Earlier rolls" })
       .first()
-      .getByRole("button", { name: "Frame 5" }),
+      .getByRole("button", { name: "Frame 1" }),
     "Enter",
   );
-  await expect.poll(() => frameNo(page)).toBe(5);
+  await expect.poll(() => frameNo(page)).toBe(1);
 
   // Export through the PNG menu.
   await key(page.getByRole("button", { name: "PNG", exact: true }), "Enter");

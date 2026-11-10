@@ -201,7 +201,7 @@ test("a shared frame is named by its number; the phone saves a 512px PNG", async
     acceptDownloads: true,
   });
   const page = await context.newPage();
-  // A valid link for the default Robot, flipped (so it opens as a new frame: frame 10).
+  // A valid link for the default Robot, flipped (so it opens as a new frame: frame 2).
   await page.goto("/");
   await hydrated(page);
   const search = await page.evaluate(() => {
@@ -221,12 +221,12 @@ test("a shared frame is named by its number; the phone saves a 512px PNG", async
   });
   await page.goto(search);
   await hydrated(page);
-  await expect(hero(page)).toHaveAttribute("alt", /frame 10/);
+  await expect(hero(page)).toHaveAttribute("alt", /frame 2\./);
   const [download] = await Promise.all([
     page.waitForEvent("download"),
     page.getByRole("button", { name: "Download PNG" }).click(),
   ]);
-  expect(download.suggestedFilename()).toBe("avatar-robots-frame10.png");
+  expect(download.suggestedFilename()).toBe("avatar-robots-frame2.png");
   expect(pngSize(await readFile((await download.path())!))).toEqual([512, 512]);
   await context.close();
 });

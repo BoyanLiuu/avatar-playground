@@ -92,8 +92,6 @@ type Actions = {
 /** Undo steps kept each way, and frames kept on the film. */
 export const MAX_STEPS = 50;
 const MAX_SHOTS = 50;
-/** Sample rolls already on each style's film when the page opens. */
-const STARTER_ROLLS = 8;
 const FIRST_SEED: Record<StyleId, string> = {
   flat: "4f2a9c",
   pixel: "91c0de",
@@ -112,25 +110,12 @@ export const defaultLocks = (id: StyleId) =>
     .sections.filter((s) => s.locked)
     .map((s) => s.key);
 
-/** Deterministic, so the server render and the client agree. */
-const firstMemory = (id: StyleId, index: number): StyleMemory => {
-  const seeds = makeRng(9000 + index);
-  const earlier = Array.from({ length: STARTER_ROLLS }, (_, k) => {
-    const seed = newSeed(seeds);
-    return {
-      no: k + 1,
-      seed,
-      config: ENGINES[id].random(makeRng(seedNumber(seed))),
-    };
-  });
-  const first = {
-    no: STARTER_ROLLS + 1,
-    seed: FIRST_SEED[id],
-    config: ENGINES[id].defaults,
-  };
+/** A fresh film: the style's first avatar as frame 1. Every later frame is one you rolled. */
+const firstMemory = (id: StyleId): StyleMemory => {
+  const first = { no: 1, seed: FIRST_SEED[id], config: ENGINES[id].defaults };
   return {
     present: {
-      shots: [...earlier, first],
+      shots: [first],
       current: first.no,
       frame: getStyle(id).frame,
       flip: false,
@@ -212,7 +197,7 @@ export const usePlayground = create<State & Actions>()((set) => {
     rollId: 0,
     transparent: false,
     memory: Object.fromEntries(
-      STYLES.map((style, i) => [style.id, firstMemory(style.id, i)]),
+      STYLES.map((style) => [style.id, firstMemory(style.id)]),
     ) as Record<StyleId, StyleMemory>,
 
     setReady: () => set({ ready: true }),

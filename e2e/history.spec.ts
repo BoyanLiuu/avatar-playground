@@ -49,16 +49,16 @@ test("undo and redo: buttons and ⌘Z / ⇧⌘Z step through rolls and picks", a
 
   await page.keyboard.press("ControlOrMeta+z");
   expect(await checked(page, "Mouth")).toBe(mouth);
-  expect(await frameNo(page)).toBe(11);
+  expect(await frameNo(page)).toBe(3);
   await page.keyboard.press("ControlOrMeta+z");
-  await expect.poll(() => frameNo(page)).toBe(10);
+  await expect.poll(() => frameNo(page)).toBe(2);
   await expect(
-    strip(page).getByRole("button", { name: "Frame 11" }),
+    strip(page).getByRole("button", { name: "Frame 3" }),
   ).toHaveCount(0);
   await expect(redoButton(page)).toBeEnabled();
 
   await page.keyboard.press("ControlOrMeta+Shift+z");
-  await expect.poll(() => frameNo(page)).toBe(11);
+  await expect.poll(() => frameNo(page)).toBe(3);
   await redoButton(page).click();
   await expect.poll(() => checked(page, "Mouth")).not.toBe(mouth);
   await expect(redoButton(page)).toBeDisabled();
@@ -88,12 +88,12 @@ test("undo keeps 50 steps", async ({ browser }) => {
     );
   await page.evaluate(() => (document.activeElement as HTMLElement)?.blur());
   await press(55, { key: " ", code: "Space" });
-  await expect.poll(() => frameNo(page)).toBe(64);
+  await expect.poll(() => frameNo(page)).toBe(56);
   await press(55, { key: "z", code: "KeyZ", metaKey: true });
   await expect(undoButton(page)).toBeDisabled();
-  expect(await frameNo(page)).toBe(14);
+  expect(await frameNo(page)).toBe(6);
   await press(55, { key: "z", code: "KeyZ", metaKey: true, shiftKey: true });
-  await expect.poll(() => frameNo(page)).toBe(64);
+  await expect.poll(() => frameNo(page)).toBe(56);
   await expect(redoButton(page)).toBeDisabled();
   await page.close();
 });
@@ -103,22 +103,23 @@ test("clicking an earlier frame restores it: the loop and the print move there",
 }) => {
   const page = await open(browser);
   await randomize(page).click();
-  const frame5 = strip(page).getByRole("button", { name: "Frame 5" });
-  const src = await frame5.locator("img").getAttribute("src");
-  await frame5.click();
-  await expect(frame5).toHaveAttribute("aria-current", "true");
+  // Frame 1 is the style's first avatar; the roll made frame 2.
+  const frame1 = strip(page).getByRole("button", { name: "Frame 1" });
+  const src = await frame1.locator("img").getAttribute("src");
+  await frame1.click();
+  await expect(frame1).toHaveAttribute("aria-current", "true");
   await expect(strip(page).locator('[aria-current="true"]')).toHaveCount(1);
   await expect(hero(page)).toHaveAttribute("src", src!);
-  expect(await frameNo(page)).toBe(5);
-  await expect(page.getByText(/Frame\s*5\s*·\s*seed/)).toBeVisible();
+  expect(await frameNo(page)).toBe(1);
+  await expect(page.getByText(/Frame\s*1\s*·\s*seed/)).toBeVisible();
 
   // Edits change the restored frame; undo goes back through them.
   await panel(page).getByRole("button", { name: "Randomize Eyes" }).click();
-  await expect(frame5.locator("img")).not.toHaveAttribute("src", src!);
+  await expect(frame1.locator("img")).not.toHaveAttribute("src", src!);
   await page.keyboard.press("ControlOrMeta+z");
-  await expect(frame5.locator("img")).toHaveAttribute("src", src!);
+  await expect(frame1.locator("img")).toHaveAttribute("src", src!);
   await page.keyboard.press("ControlOrMeta+z");
-  await expect.poll(() => frameNo(page)).toBe(10);
+  await expect.poll(() => frameNo(page)).toBe(2);
   await page.close();
 });
 
@@ -143,7 +144,7 @@ test("shortcuts are ignored while an input or a menu has focus", async ({
     await page.keyboard.press("Space");
     await page.keyboard.press("2");
     await page.waitForTimeout(100);
-    expect(await frameNo(page)).toBe(10);
+    expect(await frameNo(page)).toBe(2);
     await expect(panel(page)).toContainText("Flat Cartoon");
   }
   await page.close();
@@ -226,8 +227,9 @@ test("the strip fills its width: more frames on wide screens, none cut off, blan
     await page.close();
     return info;
   };
-  // 1856 wide fits 14 frames: 9 on the film plus 5 blanks, then 14 frames after 6 rolls.
-  expect(await fit(1856, 1000, 0)).toEqual({ frames: 9, blank: 5, cut: 0 });
-  expect(await fit(1856, 1000, 6)).toEqual({ frames: 14, blank: 0, cut: 0 });
-  expect(await fit(1280, 800, 0)).toEqual({ frames: 6, blank: 0, cut: 0 });
+  // A fresh film is frame 1 plus blanks. 1856 wide fits 14 frames: full after 13 rolls.
+  expect(await fit(1856, 1000, 0)).toEqual({ frames: 1, blank: 13, cut: 0 });
+  expect(await fit(1856, 1000, 6)).toEqual({ frames: 7, blank: 7, cut: 0 });
+  expect(await fit(1856, 1000, 20)).toEqual({ frames: 14, blank: 0, cut: 0 });
+  expect(await fit(1280, 800, 0)).toEqual({ frames: 1, blank: 5, cut: 0 });
 });
