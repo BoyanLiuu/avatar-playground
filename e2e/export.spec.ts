@@ -250,3 +250,42 @@ test("Copy SVG copies the avatar and says so", async ({
   expect(text).toContain('fill="#E6E0FF"');
   await context.close();
 });
+
+test("two exported SVGs pasted inline into one page keep their own ids and draw like their files", async ({
+  browser,
+}) => {
+  const { page, context } = await open(browser);
+  // Robots use every kind of id: the frame clip, the glow filter and the grid pattern.
+  await pickStyle(page, 3);
+  const first = (await fromMenu(page, "SVG")).bytes;
+  await page.getByRole("button", { name: /^Randomize( Space)?$/ }).click();
+  const second = (await fromMenu(page, "SVG")).bytes;
+  expect(first.equals(second)).toBe(false);
+
+  const counts = await page.evaluate(
+    (svgs) => {
+      const host = document.createElement("div");
+      host.id = "pasted";
+      host.style.cssText =
+        "position:fixed;inset:0 auto auto 0;z-index:9999;display:flex;background:#fff";
+      host.innerHTML = svgs.join("");
+      document.body.append(host);
+      const ids = [...host.querySelectorAll("[id]")].map((el) => el.id);
+      return { ids: ids.length, unique: new Set(ids).size };
+    },
+    [first.toString(), second.toString()],
+  );
+  expect(counts.ids).toBeGreaterThan(4);
+  expect(counts.unique).toBe(counts.ids);
+
+  // Each inline copy draws exactly like its own file.
+  for (const [k, file] of [first, second].entries()) {
+    const shot = await page.locator("#pasted > svg").nth(k).screenshot();
+    const a = await pixelsOf(page, dataUrl(shot), 104, true);
+    const b = await pixelsOf(page, dataUrl(file, "image/svg+xml"), 104, true);
+    let diff = 0;
+    for (let i = 0; i < a.length; i++) diff += Math.abs(a[i] - b[i]);
+    expect(diff / a.length, `inline copy ${k + 1}`).toBeLessThan(3);
+  }
+  await context.close();
+});

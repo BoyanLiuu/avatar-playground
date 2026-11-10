@@ -16,11 +16,29 @@ export const defaultPngSize = (id: StyleId) => (id === "pixel" ? 400 : 512);
 export const fileName = (id: StyleId, shot: Shot, ext: "png" | "svg") =>
   `avatar-${id}-${shot.seed ?? `frame${shot.no}`}.${ext}`;
 
-/** The standalone SVG of an avatar, `size` px square, with or without its background. */
+/** FNV-1a: a short, stable hash of a string. */
+const hash = (text: string) => {
+  let h = 0x811c9dc5;
+  for (let i = 0; i < text.length; i++) {
+    h ^= text.charCodeAt(i);
+    h = Math.imul(h, 0x01000193);
+  }
+  return (h >>> 0).toString(36);
+};
+
+/**
+ * The standalone SVG of an avatar, `size` px square, with or without its background. Its ids
+ * (clip paths, filters, patterns) carry a prefix hashed from what it shows, so two different
+ * avatars pasted inline into one page never share an id, and the same avatar always exports the
+ * same bytes.
+ */
 export const avatarSvg = (
   { id, config, frame, flip }: SharedAvatar,
   { size, transparent = false }: { size: number; transparent?: boolean },
-) => renderAvatar(id, config, { frame, flip, size, transparent }, "avatar");
+) => {
+  const uid = `avatar-${hash(JSON.stringify([id, config, frame, flip, transparent]))}`;
+  return renderAvatar(id, config, { frame, flip, size, transparent }, uid);
+};
 
 /** Rasterize an SVG at its own width and height. */
 export const svgToPng = async (svg: string, size: number) => {
